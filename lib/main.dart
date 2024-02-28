@@ -1,4 +1,8 @@
 import 'package:flutter/material.dart';
+import 'package:focus_time/page/habits_home_page.dart';
+import 'package:focus_time/page/music_page.dart';
+import 'package:focus_time/page/pomodoro_page.dart';
+import 'package:focus_time/page/todo_page.dart';
 
 void main() {
   runApp(const MyApp());
@@ -11,7 +15,7 @@ class MyApp extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return MaterialApp(
-      title: 'Flutter Demo',
+      title: 'FocusTime',
       theme: ThemeData(
         // This is the theme of your application.
         //
@@ -28,10 +32,10 @@ class MyApp extends StatelessWidget {
         //
         // This works for code too, not just values: Most code changes can be
         // tested with just a hot reload.
-        colorScheme: ColorScheme.fromSeed(seedColor: Colors.deepPurple),
+        colorScheme: ColorScheme.fromSeed(seedColor: Colors.blue.shade300),
         useMaterial3: true,
       ),
-      home: const MyHomePage(title: 'Flutter Demo Home Page'),
+      home: const MyHomePage(title: 'FocusTime Logo Here'),
     );
   }
 }
@@ -56,6 +60,30 @@ class MyHomePage extends StatefulWidget {
 
 class _MyHomePageState extends State<MyHomePage> {
   int _counter = 0;
+  int _currentPageIndex = 0;
+  // this index keeps track of the current page you're on
+  int _currentIndex = 0;
+
+  // initialize it to be 0 at the beginning
+  int _selectedIndex = 0;
+
+  // method
+  void _navigateBottomBar(int index) {
+    // knows the index user is clicking
+    // if user clicks on the bottom nav buttons, sets state and changes index to match the one that is most recently selected
+    setState(() {
+      _selectedIndex = index;
+    });
+  }
+
+  // to access different screens of the app
+  final screens = [
+    // GoalsPage(),
+    HabitsPage(),
+    TodoPage(),
+    MusicPage(),
+    PomodoroPage(),
+  ];
 
   void _incrementCounter() {
     setState(() {
@@ -105,15 +133,49 @@ class _MyHomePageState extends State<MyHomePage> {
           // wireframe for each widget.
           mainAxisAlignment: MainAxisAlignment.center,
           children: <Widget>[
-            const Text(
-              'You have pushed the button this many times:',
-            ),
-            Text(
-              '$_counter',
-              style: Theme.of(context).textTheme.headlineMedium,
-            ),
+            // to show the current page's title
+            Expanded(child: screens[_currentIndex]),
+        Text(
+          'Counter: $_counter',
+          style: TextStyle(fontSize: 20),
+        ),
+
           ],
         ),
+      ),
+      bottomNavigationBar: BottomNavigationBar(
+        // fixed to see all navigation bar text and icons at once, instead of only the current 1
+        type: BottomNavigationBarType.fixed,
+        backgroundColor: Colors.blue[300],
+        selectedItemColor: Colors.black, // the currently selected page
+        unselectedItemColor: Colors.black45, // the other pages
+        iconSize: 40,
+        selectedFontSize: 17,
+        unselectedFontSize: 15,
+        currentIndex: _currentIndex,
+        // currentIndex: _currentPageIndex,
+        // handler onTap is used to save the current page index as the highlighted one, when icon is pressed
+        // does not use background colors
+        onTap: (index) => setState(() => _currentIndex = index),
+        items: [
+          BottomNavigationBarItem(
+            icon: Icon(Icons.home),
+            label: "Habits",
+          ),
+          BottomNavigationBarItem(
+            icon: Icon(Icons.checklist),
+            label: "Todo",
+          ),
+          BottomNavigationBarItem(
+            icon: Icon(Icons.library_music_sharp),
+            label: "Music",
+          ),
+          BottomNavigationBarItem(
+            icon: Icon(Icons.access_time_filled_rounded),
+            label: "Pomodoro",
+          ),
+        ],
+
       ),
       floatingActionButton: FloatingActionButton(
         onPressed: _incrementCounter,
@@ -123,3 +185,5 @@ class _MyHomePageState extends State<MyHomePage> {
     );
   }
 }
+
+
