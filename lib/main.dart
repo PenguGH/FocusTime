@@ -78,8 +78,8 @@ class _MyHomePageState extends State<MyHomePage> {
 
   // to access different screens of the app
   final screens = [
-    // GoalsPage(),
-    HabitsPage(),
+    GoalsPage(),
+    // HabitsPage(),
     TodoPage(),
     MusicPage(),
     PomodoroPage(),
