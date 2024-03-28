@@ -1,6 +1,7 @@
 import 'dart:convert';
 import 'package:flutter/material.dart';
 import 'package:shared_preferences/shared_preferences.dart';
+import 'package:flutter_slidable/flutter_slidable.dart';
 
 class Goal {
   String name;
@@ -9,6 +10,7 @@ class Goal {
   int goal;
   bool isDaily;
   Color color;
+  bool isSwipedLeft; // Add isSwipedLeft property
 
   Goal({
     required this.name,
@@ -17,6 +19,7 @@ class Goal {
     required this.goal,
     required this.isDaily,
     required this.color,
+    this.isSwipedLeft = false, // Initialize isSwipedLeft to false by default
   });
 
   factory Goal.fromJson(Map<String, dynamic> json) {
@@ -69,28 +72,63 @@ class _GoalsPageState extends State<GoalsPage> {
       appBar: AppBar(
         title: Text("Goals"),
       ),
+      // BETTER BUT STILL A LITTLE TOO BIG. NOT SAME SIZE. V10
       body: ListView.builder(
         itemCount: goals.length,
         itemBuilder: (context, index) {
           Goal goal = goals[index];
+
           return Padding(
-            padding: const EdgeInsets.symmetric(vertical: 8.0), // to add vertical spacing between each habit
-            child: ListTile(
-              tileColor: goal.color,
-              leading: Icon(goal.icon),
-              title: Text(goal.name),
-              subtitle: Text('Progress: ${goal.progress}/${goal.goal}'),
-              trailing: IconButton(
-                icon: Icon(Icons.add),
-                onPressed: () {
-                  setState(() {
-                    goal.progress++;
-                    if (goal.progress > goal.goal) {
-                      goal.progress = 0;
-                    }
-                  });
-                  _saveGoalsToLocal();
-                },
+            padding: EdgeInsets.symmetric(vertical: 8.0),
+            // Add vertical padding between goals
+            child: Container(
+              height: 80,
+              // Set the height to match the height of each goal item
+              child: Slidable(
+                actionPane: SlidableDrawerActionPane(),
+                actions: [
+                  Container(
+                    height: 80,
+                    // Set the height to match the height of each goal item
+                    child: IconSlideAction(
+                      caption: 'Edit',
+                      color: Colors.blue,
+                      icon: Icons.edit,
+                      onTap: () => _editGoal(goal),
+                    ),
+                  ),
+                ],
+                secondaryActions: [
+                  Container(
+                    height: 80,
+                    // Set the height to match the height of each goal item
+                    child: IconSlideAction(
+                      caption: 'Delete',
+                      color: Colors.red,
+                      icon: Icons.delete,
+                      onTap: () => _deleteGoal(goal),
+                    ),
+                  ),
+                ],
+                child: ListTile(
+                  tileColor: goal.color,
+                  // Set tileColor to the color property of the goal
+                  leading: Icon(goal.icon),
+                  title: Text(goal.name),
+                  subtitle: Text('Progress: ${goal.progress}/${goal.goal}'),
+                  trailing: IconButton(
+                    icon: Icon(Icons.add),
+                    onPressed: () {
+                      setState(() {
+                        goal.progress++;
+                        if (goal.progress > goal.goal) {
+                          goal.progress = 0;
+                        }
+                      });
+                      _saveGoalsToLocal();
+                    },
+                  ),
+                ),
               ),
             ),
           );
@@ -102,6 +140,52 @@ class _GoalsPageState extends State<GoalsPage> {
         child: Icon(Icons.add),
       ),
     );
+  }
+
+  void _editGoal(Goal goal) {
+    // the logic of editing the goal here
+    // need to update to use same options as adding a goal
+    showDialog(
+      context: context,
+      builder: (context) {
+        return AlertDialog(
+          title: Text('Edit Goal'),
+          content: TextField(
+            controller: TextEditingController(text: goal.name), // Display current goal name
+            onChanged: (value) {
+              setState(() {
+                goal.name = value; // Update the goal name
+              });
+            },
+            decoration: InputDecoration(labelText: 'New Goal Name'),
+          ),
+          actions: [
+            TextButton(
+              onPressed: () {
+                Navigator.pop(context);
+              },
+              child: Text('Cancel'),
+            ),
+            TextButton(
+              onPressed: () {
+                // Save the edited goal
+                _saveGoalsToLocal();
+                Navigator.pop(context);
+              },
+              child: Text('Save'),
+            ),
+          ],
+        );
+      },
+    );
+  }
+
+  void _deleteGoal(Goal goal) {
+    // the logic to delete the goal. just removes it from screen/device
+    setState(() {
+      goals.remove(goal); // Remove the goal from the list
+    });
+    _saveGoalsToLocal(); // Save the updated goals list
   }
 
   void _showAddGoalDialog(BuildContext context) {

@@ -135,10 +135,10 @@ class _MyHomePageState extends State<MyHomePage> {
           children: <Widget>[
             // to show the current page's title
             Expanded(child: screens[_currentIndex]),
-        Text(
-          'Counter: $_counter',
-          style: TextStyle(fontSize: 20),
-        ),
+        // Text(
+        //   'Counter: $_counter',
+        //   style: TextStyle(fontSize: 20),
+        // ),
 
           ],
         ),
@@ -177,11 +177,11 @@ class _MyHomePageState extends State<MyHomePage> {
         ],
 
       ),
-      floatingActionButton: FloatingActionButton(
-        onPressed: _incrementCounter,
-        tooltip: 'Increment',
-        child: const Icon(Icons.add),
-      ), // This trailing comma makes auto-formatting nicer for build methods.
+      // floatingActionButton: FloatingActionButton(
+      //   onPressed: _incrementCounter,
+      //   tooltip: 'Increment',
+      //   child: const Icon(Icons.add),
+      // ), // This trailing comma makes auto-formatting nicer for build methods.
     );
   }
 }
