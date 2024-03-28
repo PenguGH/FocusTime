@@ -1,32 +1,6 @@
-// import 'package:flutter/material.dart';
-//
-// class HabitsPage extends StatefulWidget {
-//   const HabitsPage({super.key});
-//
-//   @override
-//   State<HabitsPage> createState() => _HabitsPageState();
-// }
-//
-// class _HabitsPageState extends State<HabitsPage> {
-//   int _counter = 0;
-//
-//
-//   @override
-//   Widget build(BuildContext context) {
-//     return Scaffold(
-//         appBar: AppBar(
-//           title: Text("Habits"),
-//         ),
-//         body:
-//         Center(
-//             child:
-//             Text('Habits', style: TextStyle(fontSize: 60))),
-//
-//     );
-//   }
-// }
-
+import 'dart:convert';
 import 'package:flutter/material.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 
 class Goal {
   String name;
@@ -34,6 +8,7 @@ class Goal {
   int progress;
   int goal;
   bool isDaily;
+  Color color;
 
   Goal({
     required this.name,
@@ -41,7 +16,30 @@ class Goal {
     this.progress = 0,
     required this.goal,
     required this.isDaily,
+    required this.color,
   });
+
+  factory Goal.fromJson(Map<String, dynamic> json) {
+    return Goal(
+      name: json['name'],
+      icon: IconData(json['icon'], fontFamily: 'MaterialIcons'),
+      progress: json['progress'],
+      goal: json['goal'],
+      isDaily: json['isDaily'],
+      color: Color(json['color']),
+    );
+  }
+
+  Map<String, dynamic> toJson() {
+    return {
+      'name': name,
+      'icon': icon.codePoint,
+      'progress': progress,
+      'goal': goal,
+      'isDaily': isDaily,
+      'color': color.value,
+    };
+  }
 }
 
 class GoalsPage extends StatefulWidget {
@@ -57,6 +55,13 @@ class _GoalsPageState extends State<GoalsPage> {
   String goalName = '';
   int frequency = 1;
   bool isDaily = true;
+  Color selectedColor = Colors.lightBlueAccent;
+
+  @override
+  void initState() {
+    super.initState();
+    _loadGoalsFromLocal();
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -68,20 +73,25 @@ class _GoalsPageState extends State<GoalsPage> {
         itemCount: goals.length,
         itemBuilder: (context, index) {
           Goal goal = goals[index];
-          return ListTile(
-            leading: Icon(goal.icon),
-            title: Text(goal.name),
-            subtitle: Text('Progress: ${goal.progress}/${goal.goal}'),
-            trailing: IconButton(
-              icon: Icon(Icons.add),
-              onPressed: () {
-                setState(() {
-                  goal.progress++;
-                  if (goal.progress > goal.goal) {
-                    goal.progress = 0;
-                  }
-                });
-              },
+          return Padding(
+            padding: const EdgeInsets.symmetric(vertical: 8.0), // to add vertical spacing between each habit
+            child: ListTile(
+              tileColor: goal.color,
+              leading: Icon(goal.icon),
+              title: Text(goal.name),
+              subtitle: Text('Progress: ${goal.progress}/${goal.goal}'),
+              trailing: IconButton(
+                icon: Icon(Icons.add),
+                onPressed: () {
+                  setState(() {
+                    goal.progress++;
+                    if (goal.progress > goal.goal) {
+                      goal.progress = 0;
+                    }
+                  });
+                  _saveGoalsToLocal();
+                },
+              ),
             ),
           );
         },
@@ -98,79 +108,91 @@ class _GoalsPageState extends State<GoalsPage> {
     showDialog(
       context: context,
       builder: (context) {
-        return AlertDialog(
-          title: Text('Add New Goal'),
-          content: Column(
-            crossAxisAlignment: CrossAxisAlignment.start,
-            mainAxisSize: MainAxisSize.min,
-            children: [
-              Text('Choose Icon:'),
-              _buildIconDropdown(),
-              TextField(
-                decoration: InputDecoration(labelText: 'Goal Name'),
-                onChanged: (value) {
-                  goalName = value;
-                },
-              ),
-              Row(
+        return StatefulBuilder(
+          builder: (BuildContext context, StateSetter setState) {
+            return AlertDialog(
+              title: Text('Add New Goal'),
+              content: Column(
+                crossAxisAlignment: CrossAxisAlignment.start,
+                mainAxisSize: MainAxisSize.min,
                 children: [
-                  Expanded(
-                    child: TextField(
-                      decoration: InputDecoration(labelText: 'Frequency'),
-                      keyboardType: TextInputType.number,
-                      onChanged: (value) {
-                        frequency = int.tryParse(value) ?? 1;
-                      },
-                    ),
-                  ),
-                  Text(' times per ${isDaily ? 'day' : 'week'}'),
-                ],
-              ),
-              Row(
-                children: [
-                  Text('Daily Goal?'),
-                  Switch(
-                    value: isDaily,
+                  Text('Choose Icon:'),
+                  _buildIconDropdownWidget(setState),
+                  TextField(
+                    decoration: InputDecoration(labelText: 'Goal Name'),
                     onChanged: (value) {
                       setState(() {
-                        isDaily = value;
+                        goalName = value;
                       });
                     },
                   ),
+                  Row(
+                    children: [
+                      Expanded(
+                        child: TextField(
+                          decoration: InputDecoration(labelText: 'Frequency'),
+                          keyboardType: TextInputType.number,
+                          onChanged: (value) {
+                            setState(() {
+                              frequency = int.tryParse(value) ?? 1;
+                            });
+                          },
+                        ),
+                      ),
+                      Text(' times per ${isDaily ? 'day' : 'week'}'),
+                    ],
+                  ),
+                  Row(
+                    children: [
+                      Text('Daily Goal?'),
+                      Switch(
+                        value: isDaily,
+                        onChanged: (value) {
+                          setState(() {
+                            isDaily = value;
+                          });
+                        },
+                      ),
+                    ],
+                  ),
+                  Text('Choose Color:'),
+                  _buildColorPickerWidget(setState),
                 ],
               ),
-            ],
-          ),
-          actions: [
-            TextButton(
-              onPressed: () {
-                Navigator.pop(context);
-              },
-              child: Text('Cancel'),
-            ),
-            TextButton(
-              onPressed: () {
-                setState(() {
-                  goals.add(
-                    Goal(
-                      name: goalName,
-                      icon: selectedIcon,
-                      goal: frequency,
-                      isDaily: isDaily,
-                    ),
-                  );
-                });
-                Navigator.pop(context);
-              },
-              child: Text('Add Goal'),
-            ),
-          ],
+              actions: [
+                TextButton(
+                  onPressed: () {
+                    Navigator.pop(context);
+                  },
+                  child: Text('Cancel'),
+                ),
+                TextButton(
+                  onPressed: () {
+                    setState(() {
+                      goals.add(
+                        Goal(
+                          name: goalName,
+                          icon: selectedIcon,
+                          goal: frequency,
+                          isDaily: isDaily,
+                          color: selectedColor,
+                        ),
+                      );
+                    });
+                    _saveGoalsToLocal();
+                    Navigator.pop(context);
+                  },
+                  child: Text('Add Goal'),
+                ),
+              ],
+            );
+          },
         );
       },
     );
   }
 
-  Widget _buildIconDropdown() {
+  Widget _buildIconDropdownWidget(StateSetter setState) {
     return DropdownButton<IconData>(
       value: selectedIcon,
       items: [
@@ -205,16 +227,15 @@ class _GoalsPageState extends State<GoalsPage> {
           ),
         ),
         DropdownMenuItem(
-          value: Icons.fastfood,
+          value: Icons.apple,
           child: Row(
             children: [
-              Icon(Icons.fastfood),
+              Icon(Icons.apple),
               SizedBox(width: 8.0),
               Text('Healthy Eating'),
             ],
           ),
         ),
-        // Add more icons as needed
       ],
       onChanged: (value) {
         setState(() {
@@ -222,6 +243,55 @@ class _GoalsPageState extends State<GoalsPage> {
         });
       },
     );
+  }
+
+  Widget _buildColorPickerWidget(StateSetter setState) {
+    return Container(
+      child: Row(
+        mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+        children: [
+          _colorButtonWidget(Colors.lightBlueAccent, setState),
+          _colorButtonWidget(Colors.redAccent, setState),
+          _colorButtonWidget(Colors.greenAccent, setState),
+          _colorButtonWidget(Colors.yellowAccent, setState),
+          _colorButtonWidget(Colors.orangeAccent, setState),
+        ],
+      ),
+    );
+  }
+
+  Widget _colorButtonWidget(Color color, StateSetter setState) {
+    return GestureDetector(
+      onTap: () {
+        setState(() {
+          selectedColor = color;
+        });
+      },
+      child: Container(
+        width: 30,
+        height: 30,
+        decoration: BoxDecoration(
+          shape: BoxShape.circle,
+          color: color,
+        ),
+      ),
+    );
+  }
+
+  void _saveGoalsToLocal() async {
+    SharedPreferences prefs = await SharedPreferences.getInstance();
+    List<String> goalsJson = goals.map((goal) => jsonEncode(goal.toJson())).toList();
+    await prefs.setStringList('goals', goalsJson);
+  }
+
+  Future<void> _loadGoalsFromLocal() async {
+    SharedPreferences prefs = await SharedPreferences.getInstance();
+    List<String>? goalsJson = prefs.getStringList('goals');
+    if (goalsJson != null) {
+      setState(() {
+        goals = goalsJson.map((json) => Goal.fromJson(jsonDecode(json))).toList();
+      });
+    }
   }
 }
 
