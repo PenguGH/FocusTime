@@ -369,25 +369,6 @@ class _GoalsPageState extends State<GoalsPage> {
     );
   }
 
-  // unused rounded container
-  // Widget _colorButtonWidget(Color color, StateSetter setState) {
-  //   return GestureDetector(
-  //     onTap: () {
-  //       setState(() {
-  //         selectedColor = color;
-  //       });
-  //     },
-  //     child: Container(
-  //       width: 30,
-  //       height: 30,
-  //       decoration: BoxDecoration(
-  //         shape: BoxShape.circle,
-  //         color: color,
-  //       ),
-  //     ),
-  //   );
-  // }
-
   void _saveGoalsToLocal() async {
     SharedPreferences prefs = await SharedPreferences.getInstance();
     List<String> goalsJson = goals.map((goal) => jsonEncode(goal.toJson())).toList();
