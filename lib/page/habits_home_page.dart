@@ -123,7 +123,7 @@ class _GoalsPageState extends State<GoalsPage> {
                   // Sets the tileColor to the color property of the goal
                   leading: Icon(goal.icon),
                   title: Text(goal.name),
-                  subtitle: Text('Progress: ${goal.progress}/${goal.goal}'),
+                  subtitle: Text('Progress: ${goal.progress}/${goal.goal} (${goal.isDaily ? 'Daily' : 'Weekly'})'),
                   trailing: IconButton(
                     icon: Icon(Icons.add),
                     onPressed: () {
@@ -340,6 +340,7 @@ class _GoalsPageState extends State<GoalsPage> {
     );
   }
 
+  // used to select an icon and goal type
   Widget _buildIconDropdownWidget(StateSetter setState) {
     return DropdownButton<IconData>(
       value: selectedIcon,
