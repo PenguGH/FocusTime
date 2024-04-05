@@ -4,7 +4,6 @@ import 'package:shared_preferences/shared_preferences.dart';
 import 'package:flutter_slidable/flutter_slidable.dart';
 import 'package:flutter_material_color_picker/flutter_material_color_picker.dart';
 
-
 class Goal {
   String name;
   IconData icon;
@@ -12,7 +11,7 @@ class Goal {
   int goal;
   bool isDaily;
   Color color;
-  bool isSwipedLeft; // Add isSwipedLeft property
+  bool isSwipedLeft; // to determine isSwipedLeft property (used for edit/delete gestures)
 
   Goal({
     required this.name,
@@ -55,6 +54,7 @@ class GoalsPage extends StatefulWidget {
 }
 
 class _GoalsPageState extends State<GoalsPage> {
+  // default values used if the user does not fill in all parts of the form
   List<Goal> goals = [];
   IconData selectedIcon = Icons.directions_run;
   String goalName = '';
@@ -82,6 +82,13 @@ class _GoalsPageState extends State<GoalsPage> {
           return Padding(
             padding: EdgeInsets.symmetric(vertical: 8.0),
             // Adds vertical padding between goals to separate them
+
+          // to add spacing to the left and right sides of each goal. makes each goal more prominent
+          child: Card(
+            shape: RoundedRectangleBorder(
+              borderRadius: BorderRadius.circular(10.0),   // changes border radius
+            ),
+
             child: Container(
               height: 80,
               // Sets the height to match the height of each goal item
@@ -132,9 +139,11 @@ class _GoalsPageState extends State<GoalsPage> {
                 ),
               ),
             ),
+           ), // extra ) for rounded edges
           );
         },
       ),
+      // floating action button used to add a new goal
       floatingActionButton: FloatingActionButton(
         onPressed: () => _showAddGoalDialog(context),
         tooltip: 'Add Goal',
@@ -145,14 +154,14 @@ class _GoalsPageState extends State<GoalsPage> {
 
   void _editGoal(Goal goal) {
     // the logic of editing the goal
-    // need to update to use same options as adding a goal
+    // todo need to update to use same options as adding a new goal
     showDialog(
       context: context,
       builder: (context) {
         return AlertDialog(
           title: Text('Edit Goal'),
           content: TextField(
-            controller: TextEditingController(text: goal.name), // Display current goal name
+            controller: TextEditingController(text: goal.name), // Displays current goal name
             onChanged: (value) {
               setState(() {
                 goal.name = value; // Update the goal name
@@ -188,111 +197,6 @@ class _GoalsPageState extends State<GoalsPage> {
     });
     _saveGoalsToLocal(); // Save the updated goals list
   }
-
-  // old goals form
-  // void _showAddGoalDialog(BuildContext context) {
-  //   showDialog(
-  //     context: context,
-  //     builder: (context) {
-  //       return StatefulBuilder(
-  //         builder: (BuildContext context, StateSetter setState) {
-  //           return AlertDialog(
-  //             title: Text('Add New Goal'),
-  //             content: Column(
-  //               crossAxisAlignment: CrossAxisAlignment.start,
-  //               mainAxisSize: MainAxisSize.min,
-  //               children: [
-  //                 Text('Choose Icon:'),
-  //                 _buildIconDropdownWidget(setState),
-  //                 TextField(
-  //                   decoration: InputDecoration(labelText: 'Goal Name'),
-  //                   onChanged: (value) {
-  //                     setState(() {
-  //                       goalName = value;
-  //                     });
-  //                   },
-  //                 ),
-  //                 Row(
-  //                   children: [
-  //                     Expanded(
-  //                       child: TextField(
-  //                         decoration: InputDecoration(labelText: 'Frequency'),
-  //                         keyboardType: TextInputType.number,
-  //                         onChanged: (value) {
-  //                           setState(() {
-  //                             frequency = int.tryParse(value) ?? 1;
-  //                           });
-  //                         },
-  //                       ),
-  //                     ),
-  //                     Text(' times per ${isDaily ? 'day' : 'week'}'),
-  //                   ],
-  //                 ),
-  //                 Row(
-  //                   children: [
-  //                     Text('Daily Goal?'),
-  //                     Switch(
-  //                       value: isDaily,
-  //                       onChanged: (value) {
-  //                         setState(() {
-  //                           isDaily = value;
-  //                         });
-  //                       },
-  //                     ),
-  //                   ],
-  //                 ),
-  //                 Text('Choose Color:'),
-  //                 _buildColorPickerWidget(setState),
-  //               ],
-  //             ),
-  //             actions: [
-  //               TextButton(
-  //                 onPressed: () {
-  //                   Navigator.pop(context);
-  //                 },
-  //                 child: Text('Cancel'),
-  //               ),
-  //               TextButton(
-  //                 onPressed: () {
-  //                   setState(() {
-  //                     goals.add(
-  //                       Goal(
-  //                         name: goalName,
-  //                         icon: selectedIcon,
-  //                         goal: frequency,
-  //                         isDaily: isDaily,
-  //                         color: selectedColor,
-  //                       ),
-  //                     );
-  //                   });
-  //                   _saveGoalsToLocal();
-  //                   Navigator.pop(context);
-  //                 },
-  //                 child: Text('Add Goal'),
-  //               ),
-  //             ],
-  //           );
-  //         },
-  //       );
-  //     },
-  //   );
-  // }
-
-// old color picker: only 5 preselected colors available
-  // Widget _buildColorPickerWidget(StateSetter setState) {
-  //   return Container(
-  //     child: Row(
-  //       mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-  //       children: [
-  //         _colorButtonWidget(Colors.lightBlueAccent, setState),
-  //         _colorButtonWidget(Colors.redAccent, setState),
-  //         _colorButtonWidget(Colors.greenAccent, setState),
-  //         _colorButtonWidget(Colors.yellowAccent, setState),
-  //         _colorButtonWidget(Colors.orangeAccent, setState),
-  //       ],
-  //     ),
-  //   );
-  // }
 
   // new goal form with more color options
   void _showAddGoalDialog(BuildContext context) {
@@ -465,23 +369,24 @@ class _GoalsPageState extends State<GoalsPage> {
     );
   }
 
-  Widget _colorButtonWidget(Color color, StateSetter setState) {
-    return GestureDetector(
-      onTap: () {
-        setState(() {
-          selectedColor = color;
-        });
-      },
-      child: Container(
-        width: 30,
-        height: 30,
-        decoration: BoxDecoration(
-          shape: BoxShape.circle,
-          color: color,
-        ),
-      ),
-    );
-  }
+  // unused rounded container
+  // Widget _colorButtonWidget(Color color, StateSetter setState) {
+  //   return GestureDetector(
+  //     onTap: () {
+  //       setState(() {
+  //         selectedColor = color;
+  //       });
+  //     },
+  //     child: Container(
+  //       width: 30,
+  //       height: 30,
+  //       decoration: BoxDecoration(
+  //         shape: BoxShape.circle,
+  //         color: color,
+  //       ),
+  //     ),
+  //   );
+  // }
 
   void _saveGoalsToLocal() async {
     SharedPreferences prefs = await SharedPreferences.getInstance();
