@@ -2,6 +2,8 @@ import 'dart:convert';
 import 'package:flutter/material.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:flutter_slidable/flutter_slidable.dart';
+import 'package:flutter_material_color_picker/flutter_material_color_picker.dart';
+
 
 class Goal {
   String name;
@@ -72,7 +74,6 @@ class _GoalsPageState extends State<GoalsPage> {
       appBar: AppBar(
         title: Text("Goals"),
       ),
-      // BETTER BUT STILL A LITTLE TOO BIG. NOT SAME SIZE. V10
       body: ListView.builder(
         itemCount: goals.length,
         itemBuilder: (context, index) {
@@ -80,16 +81,16 @@ class _GoalsPageState extends State<GoalsPage> {
 
           return Padding(
             padding: EdgeInsets.symmetric(vertical: 8.0),
-            // Add vertical padding between goals
+            // Adds vertical padding between goals to separate them
             child: Container(
               height: 80,
-              // Set the height to match the height of each goal item
+              // Sets the height to match the height of each goal item
               child: Slidable(
                 actionPane: SlidableDrawerActionPane(),
                 actions: [
                   Container(
                     height: 80,
-                    // Set the height to match the height of each goal item
+                    // Sets the height to match the height of each goal item
                     child: IconSlideAction(
                       caption: 'Edit',
                       color: Colors.blue,
@@ -101,7 +102,7 @@ class _GoalsPageState extends State<GoalsPage> {
                 secondaryActions: [
                   Container(
                     height: 80,
-                    // Set the height to match the height of each goal item
+                    // Sets the height to match the height of each goal item
                     child: IconSlideAction(
                       caption: 'Delete',
                       color: Colors.red,
@@ -112,7 +113,7 @@ class _GoalsPageState extends State<GoalsPage> {
                 ],
                 child: ListTile(
                   tileColor: goal.color,
-                  // Set tileColor to the color property of the goal
+                  // Sets the tileColor to the color property of the goal
                   leading: Icon(goal.icon),
                   title: Text(goal.name),
                   subtitle: Text('Progress: ${goal.progress}/${goal.goal}'),
@@ -143,7 +144,7 @@ class _GoalsPageState extends State<GoalsPage> {
   }
 
   void _editGoal(Goal goal) {
-    // the logic of editing the goal here
+    // the logic of editing the goal
     // need to update to use same options as adding a goal
     showDialog(
       context: context,
@@ -181,17 +182,125 @@ class _GoalsPageState extends State<GoalsPage> {
   }
 
   void _deleteGoal(Goal goal) {
-    // the logic to delete the goal. just removes it from screen/device
+    // just removes the goal from screen/device
     setState(() {
       goals.remove(goal); // Remove the goal from the list
     });
     _saveGoalsToLocal(); // Save the updated goals list
   }
 
+  // old goals form
+  // void _showAddGoalDialog(BuildContext context) {
+  //   showDialog(
+  //     context: context,
+  //     builder: (context) {
+  //       return StatefulBuilder(
+  //         builder: (BuildContext context, StateSetter setState) {
+  //           return AlertDialog(
+  //             title: Text('Add New Goal'),
+  //             content: Column(
+  //               crossAxisAlignment: CrossAxisAlignment.start,
+  //               mainAxisSize: MainAxisSize.min,
+  //               children: [
+  //                 Text('Choose Icon:'),
+  //                 _buildIconDropdownWidget(setState),
+  //                 TextField(
+  //                   decoration: InputDecoration(labelText: 'Goal Name'),
+  //                   onChanged: (value) {
+  //                     setState(() {
+  //                       goalName = value;
+  //                     });
+  //                   },
+  //                 ),
+  //                 Row(
+  //                   children: [
+  //                     Expanded(
+  //                       child: TextField(
+  //                         decoration: InputDecoration(labelText: 'Frequency'),
+  //                         keyboardType: TextInputType.number,
+  //                         onChanged: (value) {
+  //                           setState(() {
+  //                             frequency = int.tryParse(value) ?? 1;
+  //                           });
+  //                         },
+  //                       ),
+  //                     ),
+  //                     Text(' times per ${isDaily ? 'day' : 'week'}'),
+  //                   ],
+  //                 ),
+  //                 Row(
+  //                   children: [
+  //                     Text('Daily Goal?'),
+  //                     Switch(
+  //                       value: isDaily,
+  //                       onChanged: (value) {
+  //                         setState(() {
+  //                           isDaily = value;
+  //                         });
+  //                       },
+  //                     ),
+  //                   ],
+  //                 ),
+  //                 Text('Choose Color:'),
+  //                 _buildColorPickerWidget(setState),
+  //               ],
+  //             ),
+  //             actions: [
+  //               TextButton(
+  //                 onPressed: () {
+  //                   Navigator.pop(context);
+  //                 },
+  //                 child: Text('Cancel'),
+  //               ),
+  //               TextButton(
+  //                 onPressed: () {
+  //                   setState(() {
+  //                     goals.add(
+  //                       Goal(
+  //                         name: goalName,
+  //                         icon: selectedIcon,
+  //                         goal: frequency,
+  //                         isDaily: isDaily,
+  //                         color: selectedColor,
+  //                       ),
+  //                     );
+  //                   });
+  //                   _saveGoalsToLocal();
+  //                   Navigator.pop(context);
+  //                 },
+  //                 child: Text('Add Goal'),
+  //               ),
+  //             ],
+  //           );
+  //         },
+  //       );
+  //     },
+  //   );
+  // }
+
+// old color picker: only 5 preselected colors available
+  // Widget _buildColorPickerWidget(StateSetter setState) {
+  //   return Container(
+  //     child: Row(
+  //       mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+  //       children: [
+  //         _colorButtonWidget(Colors.lightBlueAccent, setState),
+  //         _colorButtonWidget(Colors.redAccent, setState),
+  //         _colorButtonWidget(Colors.greenAccent, setState),
+  //         _colorButtonWidget(Colors.yellowAccent, setState),
+  //         _colorButtonWidget(Colors.orangeAccent, setState),
+  //       ],
+  //     ),
+  //   );
+  // }
+
+  // new goal form with more color options
   void _showAddGoalDialog(BuildContext context) {
     showDialog(
       context: context,
       builder: (context) {
+        Color selectedColor = Colors.lightBlueAccent; // Initialize selectedColor
+
         return StatefulBuilder(
           builder: (BuildContext context, StateSetter setState) {
             return AlertDialog(
@@ -240,7 +349,14 @@ class _GoalsPageState extends State<GoalsPage> {
                     ],
                   ),
                   Text('Choose Color:'),
-                  _buildColorPickerWidget(setState),
+                  MaterialColorPicker(
+                    onColorChange: (Color color) {
+                      setState(() {
+                        selectedColor = color;
+                      });
+                    },
+                    selectedColor: selectedColor,
+                  ),
                 ],
               ),
               actions: [
@@ -286,7 +402,7 @@ class _GoalsPageState extends State<GoalsPage> {
             children: [
               Icon(Icons.directions_run),
               SizedBox(width: 8.0),
-              Text('Running'),
+              Text('Exercise'),
             ],
           ),
         ),
@@ -320,27 +436,32 @@ class _GoalsPageState extends State<GoalsPage> {
             ],
           ),
         ),
+        DropdownMenuItem(
+          value: Icons.work,
+          child: Row(
+            children: [
+              Icon(Icons.work),
+              SizedBox(width: 8.0),
+              Text('Work'),
+            ],
+          ),
+        ),
+        DropdownMenuItem(
+          value: Icons.lightbulb,
+          child: Row(
+            children: [
+              Icon(Icons.lightbulb),
+              SizedBox(width: 8.0),
+              Text('Other'),
+            ],
+          ),
+        ),
       ],
       onChanged: (value) {
         setState(() {
           selectedIcon = value!;
         });
       },
-    );
-  }
-
-  Widget _buildColorPickerWidget(StateSetter setState) {
-    return Container(
-      child: Row(
-        mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-        children: [
-          _colorButtonWidget(Colors.lightBlueAccent, setState),
-          _colorButtonWidget(Colors.redAccent, setState),
-          _colorButtonWidget(Colors.greenAccent, setState),
-          _colorButtonWidget(Colors.yellowAccent, setState),
-          _colorButtonWidget(Colors.orangeAccent, setState),
-        ],
-      ),
     );
   }
 
