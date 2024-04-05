@@ -206,43 +206,42 @@ class _GoalsPageState extends State<GoalsPage> {
     String goalName = '';
     int frequency = 1;
     bool isDaily = false;
-    IconData? selectedIcon; // Initialize selectedIcon with null
     Color selectedColor = Colors.lightBlueAccent;
 
-    // color selection dialog
-    // Function to navigate to the color selection step
-    void _selectColorStep(StateSetter setState) {
-      showDialog(
-        context: context,
-        builder: (context) {
-          return AlertDialog(
-            title: Text('Choose Color'),
-            content: MaterialColorPicker(
-              onColorChange: (Color color) {
-                setState(() {
-                  selectedColor = color;
-                });
-              },
-              selectedColor: selectedColor,
-            ),
-            actions: [
-              TextButton(
-                onPressed: () {
-                  Navigator.pop(context);
+      // color selection dialog
+      // Function to navigate to the color selection step
+      void _selectColorStep(StateSetter setState) {
+        showDialog(
+          context: context,
+          builder: (context) {
+            return AlertDialog(
+              title: Text('Choose Color'),
+              content: MaterialColorPicker(
+                onColorChange: (Color color) {
+                  setState(() {
+                    selectedColor = color;
+                  });
                 },
-                child: Text('Back'),
+                selectedColor: selectedColor,
               ),
-              TextButton(
-                onPressed: () {
-                  Navigator.pop(context, true); // Return true to indicate color selection is finished
-                },
-                child: Text('Done'),
-              ),
-            ],
-          );
-        },
-      );
-    }
+              actions: [
+                TextButton(
+                  onPressed: () {
+                    Navigator.pop(context);
+                  },
+                  child: Text('Back'),
+                ),
+                TextButton(
+                  onPressed: () {
+                    Navigator.pop(context, true); // Return true to indicate color selection is finished
+                  },
+                  child: Text('Done'),
+                ),
+              ],
+            );
+          },
+        );
+      }
 
     // Main dialog/form content to add a new goal/habit to the existing list
     showDialog(
@@ -317,7 +316,7 @@ class _GoalsPageState extends State<GoalsPage> {
                       goals.add(
                         Goal(
                           name: goalName,
-                          icon: selectedIcon ?? Icons.directions_run, // Default backup icon
+                          icon: selectedIcon ?? Icons.directions_run, // Uses the user selectedIcon here. Otherwise it uses the default icon if none is selected.
                           goal: frequency,
                           isDaily: isDaily,
                           color: selectedColor,
@@ -405,6 +404,7 @@ class _GoalsPageState extends State<GoalsPage> {
       onChanged: (value) {
         setState(() {
           selectedIcon = value!;
+          print("Selected Icon: $selectedIcon");
         });
       },
     );
