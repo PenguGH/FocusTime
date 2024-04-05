@@ -178,8 +178,11 @@ class _GoalsPageState extends State<GoalsPage> {
             ),
             TextButton(
               onPressed: () {
-                // Save the edited goal
-                _saveGoalsToLocal();
+                // setState to update state upon change
+                setState(() {
+                  // Save the edited goal
+                  _saveGoalsToLocal();
+                });
                 Navigator.pop(context);
               },
               child: Text('Save'),
@@ -208,40 +211,40 @@ class _GoalsPageState extends State<GoalsPage> {
     bool isDaily = false;
     Color selectedColor = Colors.lightBlueAccent;
 
-      // color selection dialog
-      // Function to navigate to the color selection step
-      void _selectColorStep(StateSetter setState) {
-        showDialog(
-          context: context,
-          builder: (context) {
-            return AlertDialog(
-              title: Text('Choose Color'),
-              content: MaterialColorPicker(
-                onColorChange: (Color color) {
-                  setState(() {
-                    selectedColor = color;
-                  });
+    // color selection dialog
+    // Function to navigate to the color selection step
+    void _selectColorStep(StateSetter setState) {
+      showDialog(
+        context: context,
+        builder: (context) {
+          return AlertDialog(
+            title: Text('Choose Color'),
+            content: MaterialColorPicker(
+              onColorChange: (Color color) {
+                setState(() {
+                  selectedColor = color;
+                });
+              },
+              selectedColor: selectedColor,
+            ),
+            actions: [
+              TextButton(
+                onPressed: () {
+                  Navigator.pop(context);
                 },
-                selectedColor: selectedColor,
+                child: Text('Back'),
               ),
-              actions: [
-                TextButton(
-                  onPressed: () {
-                    Navigator.pop(context);
-                  },
-                  child: Text('Back'),
-                ),
-                TextButton(
-                  onPressed: () {
-                    Navigator.pop(context, true); // Return true to indicate color selection is finished
-                  },
-                  child: Text('Done'),
-                ),
-              ],
-            );
-          },
-        );
-      }
+              TextButton(
+                onPressed: () {
+                  Navigator.pop(context, true); // Return true to indicate color selection is finished
+                },
+                child: Text('Done'),
+              ),
+            ],
+          );
+        },
+      );
+    }
 
     // Main dialog/form content to add a new goal/habit to the existing list
     showDialog(
@@ -311,8 +314,8 @@ class _GoalsPageState extends State<GoalsPage> {
                 ),
                 TextButton(
                   onPressed: () {
-                    // Creates a new Goal object and adds it to the existing goals list
                     setState(() {
+                      // Creates a new Goal object and adds it to the existing goals list
                       goals.add(
                         Goal(
                           name: goalName,
@@ -322,9 +325,10 @@ class _GoalsPageState extends State<GoalsPage> {
                           color: selectedColor,
                         ),
                       );
+                      print('Number of goals after adding: ${goals.length}'); // to check if adding goals works properly
+                      _saveGoalsToLocal(); // Save the updated goals list
+                      Navigator.pop(context); // Close the dialog
                     });
-                    _saveGoalsToLocal(); // Save the updated goals list
-                    Navigator.pop(context); // Close the dialog
                   },
                   child: Text('Add Goal'),
                 ),
@@ -410,10 +414,19 @@ class _GoalsPageState extends State<GoalsPage> {
     );
   }
 
-  void _saveGoalsToLocal() async {
-    SharedPreferences prefs = await SharedPreferences.getInstance();
-    List<String> goalsJson = goals.map((goal) => jsonEncode(goal.toJson())).toList();
-    await prefs.setStringList('goals', goalsJson);
+  void _saveGoalsToLocal() {
+    SharedPreferences.getInstance().then((prefs) {
+      List<String> goalsJson = goals.map((goal) => jsonEncode(goal.toJson())).toList();
+      prefs.setStringList('goals', goalsJson).then((_) {
+        setState(() {
+          // Rebuilds the UI in real time after adding and saving goals to the list
+        });
+      }).catchError((error) {
+        print('Error saving goals to your device local storage: $error');
+      });
+    }).catchError((error) {
+      print('Error accessing your device local storage: $error');
+    });
   }
 
   Future<void> _loadGoalsFromLocal() async {
