@@ -198,13 +198,56 @@ class _GoalsPageState extends State<GoalsPage> {
     _saveGoalsToLocal(); // Save the updated goals list
   }
 
-  // new goal form with more color options
+  // new goal form with the most color options. dialog = form.
+  // improved color picker by adding 10 shades for each color
+  // 190 total color options available now!
   void _showAddGoalDialog(BuildContext context) {
+    // Initializes default variables for form fields if the user did not provide any.
+    String goalName = '';
+    int frequency = 1;
+    bool isDaily = false;
+    IconData? selectedIcon; // Initialize selectedIcon with null
+    Color selectedColor = Colors.lightBlueAccent;
+
+    // color selection dialog
+    // Function to navigate to the color selection step
+    void _selectColorStep(StateSetter setState) {
+      showDialog(
+        context: context,
+        builder: (context) {
+          return AlertDialog(
+            title: Text('Choose Color'),
+            content: MaterialColorPicker(
+              onColorChange: (Color color) {
+                setState(() {
+                  selectedColor = color;
+                });
+              },
+              selectedColor: selectedColor,
+            ),
+            actions: [
+              TextButton(
+                onPressed: () {
+                  Navigator.pop(context);
+                },
+                child: Text('Back'),
+              ),
+              TextButton(
+                onPressed: () {
+                  Navigator.pop(context, true); // Return true to indicate color selection is finished
+                },
+                child: Text('Done'),
+              ),
+            ],
+          );
+        },
+      );
+    }
+
+    // Main dialog/form content to add a new goal/habit to the existing list
     showDialog(
       context: context,
       builder: (context) {
-        Color selectedColor = Colors.lightBlueAccent; // Initialize selectedColor
-
         return StatefulBuilder(
           builder: (BuildContext context, StateSetter setState) {
             return AlertDialog(
@@ -214,7 +257,7 @@ class _GoalsPageState extends State<GoalsPage> {
                 mainAxisSize: MainAxisSize.min,
                 children: [
                   Text('Choose Icon:'),
-                  _buildIconDropdownWidget(setState),
+                  _buildIconDropdownWidget(setState), // Function to build the icon dropdown menu
                   TextField(
                     decoration: InputDecoration(labelText: 'Goal Name'),
                     onChanged: (value) {
@@ -252,14 +295,11 @@ class _GoalsPageState extends State<GoalsPage> {
                       ),
                     ],
                   ),
-                  Text('Choose Color:'),
-                  MaterialColorPicker(
-                    onColorChange: (Color color) {
-                      setState(() {
-                        selectedColor = color;
-                      });
+                  TextButton(
+                    onPressed: () {
+                      _selectColorStep(setState);
                     },
-                    selectedColor: selectedColor,
+                    child: Text('Select Color'),
                   ),
                 ],
               ),
@@ -272,19 +312,20 @@ class _GoalsPageState extends State<GoalsPage> {
                 ),
                 TextButton(
                   onPressed: () {
+                    // Creates a new Goal object and adds it to the existing goals list
                     setState(() {
                       goals.add(
                         Goal(
                           name: goalName,
-                          icon: selectedIcon,
+                          icon: selectedIcon ?? Icons.directions_run, // Default backup icon
                           goal: frequency,
                           isDaily: isDaily,
                           color: selectedColor,
                         ),
                       );
                     });
-                    _saveGoalsToLocal();
-                    Navigator.pop(context);
+                    _saveGoalsToLocal(); // Save the updated goals list
+                    Navigator.pop(context); // Close the dialog
                   },
                   child: Text('Add Goal'),
                 ),
