@@ -79,7 +79,8 @@ class _MyHomePageState extends State<MyHomePage> {
   // to access different screens of the app
   final screens = [
     // can always add more pages/screens later
-    GoalsPage(), // Goals = To have Long term Habits that stick and become part of your daily life and routine.
+    GoalsPage(), // Goals = To achieve something long term that you set out to accomplish.
+    // A way to achieve those goals, is by building habits. Ideally short term habits overtime build up into Long term Habits that stick and become part of your daily life and routine.
     TodoPage(),
     // MusicPage(),
     PomodoroPage(),
