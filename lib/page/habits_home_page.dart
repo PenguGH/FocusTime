@@ -4,6 +4,12 @@ import 'package:shared_preferences/shared_preferences.dart';
 import 'package:flutter_slidable/flutter_slidable.dart';
 import 'package:flutter_material_color_picker/flutter_material_color_picker.dart';
 
+// Habits help us to reach our goals over time through consistent slow progress.
+// Daily and weekly habits make reaching those big goals more achievable.
+// Some keystone habits can greatly improve many aspects of your life.
+// Such as working out since it requires consistent healthy eating, a caloric surplus
+// or deficit depending on your goals, progressive strength and weight training,
+// plenty of sleep and water, etc to maximize your gains.
 class Goal {
   // properties of each goal
   String name;

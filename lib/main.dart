@@ -78,10 +78,10 @@ class _MyHomePageState extends State<MyHomePage> {
 
   // to access different screens of the app
   final screens = [
-    GoalsPage(),
-    // HabitsPage(),
+    // can always add more pages/screens later
+    GoalsPage(), // Goals = To have Long term Habits that stick and become part of your daily life and routine.
     TodoPage(),
-    MusicPage(),
+    // MusicPage(),
     PomodoroPage(),
   ];
 
@@ -166,10 +166,10 @@ class _MyHomePageState extends State<MyHomePage> {
             icon: Icon(Icons.checklist),
             label: "Todo",
           ),
-          BottomNavigationBarItem(
-            icon: Icon(Icons.library_music_sharp),
-            label: "Music",
-          ),
+          // BottomNavigationBarItem(
+          //   icon: Icon(Icons.library_music_sharp),
+          //   label: "Music",
+          // ),
           BottomNavigationBarItem(
             icon: Icon(Icons.access_time_filled_rounded),
             label: "Pomodoro",
