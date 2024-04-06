@@ -5,6 +5,7 @@ import 'package:flutter_slidable/flutter_slidable.dart';
 import 'package:flutter_material_color_picker/flutter_material_color_picker.dart';
 
 class Goal {
+  // properties of each goal
   String name;
   String unitName;
   IconData icon;
@@ -149,10 +150,27 @@ class _GoalsPageState extends State<GoalsPage> {
   void _editGoal(Goal goal) {
     // the logic for editing an existing goal
 
+    // Creating a new temporary working copy of the og goal object for editing to not affect the original data until changes are officially saved.
+    // editedGoal object saves all working changes.
+    // If editing a goal is canceled, the original data will remain unchanged.
+    Goal editedGoal = Goal(
+      // getting the og properties of the goal you want to edit, before any changes are made
+      name: goal.name,
+      unitName: goal.unitName,
+      progress: goal.progress,
+
+      // if I want to make these available for editing in the future
+      icon: goal.icon,
+      goal: goal.goal,
+      isDaily: goal.isDaily,
+      color: goal.color,
+    );
+
+    // if two objects are using the same text editing controller, it causes the cursor to move to the beginning of the textbox when typing.
     // separate text editing controllers for each TextField entry. this stops the cursor from always moving to the beginning when typing.
     // initializes each instance with the correct text field data and maintains its current cursor position.
-    TextEditingController goalNameController = TextEditingController(text: goal.name); // uses the current goal name to be edited.
-    TextEditingController unitNameController = TextEditingController(text: goal.unitName); // uses the current unit name to be edited.
+    TextEditingController editedGoalNameController = TextEditingController(text: editedGoal.name); // uses the current edited goal name as placeholder.
+    TextEditingController editedUnitNameController = TextEditingController(text: editedGoal.unitName); // uses the current edited unit name as placeholder.
 
     // editing goal dialog/form
     showDialog(
@@ -168,19 +186,19 @@ class _GoalsPageState extends State<GoalsPage> {
                 mainAxisSize: MainAxisSize.min,
                 children: [
                   TextField(
-                    controller: goalNameController,
+                    controller: editedGoalNameController,
                     onChanged: (value) {
                       setState(() {
-                        goal.name = value;
+                        editedGoal.name = value;
                       });
                     },
                     decoration: InputDecoration(labelText: 'New Goal Name'),
                   ),
                   TextField(
-                    controller: unitNameController,
+                    controller: editedUnitNameController,
                     onChanged: (value) {
                       setState(() {
-                        goal.unitName = value;
+                        editedGoal.unitName = value;
                       });
                     },
                     decoration: InputDecoration(labelText: 'New Unit Name'),
@@ -191,7 +209,7 @@ class _GoalsPageState extends State<GoalsPage> {
                       onPressed: () {
                         setState(() {
                           // Logic for resetting progress data; just resets it back to 0.
-                          goal.progress = 0;
+                          editedGoal.progress = 0;
 
                           // automatically reset progress upon onPressed and saves changes. (implicitly saves data)
                           // _saveGoalsToLocal();
@@ -207,17 +225,25 @@ class _GoalsPageState extends State<GoalsPage> {
                   onPressed: () {
                     Navigator.pop(context);
                   },
+                  // cancels all editing changes and discards them
                   child: Text('Cancel'),
                 ),
                 TextButton(
                   onPressed: () {
+                    // Save all changes made to the original goal
                     setState(() {
                       // Logic for saving edit changes. Changes will only be saved if there were changes made and this Save Changes button was pressed.
-                      // Save changes button is to (explicitly) confirm changes before altering the data.
+                      // sets the original goal data to the edited goal data
+                      goal.name = editedGoal.name;
+                      goal.unitName = editedGoal.unitName;
+                      goal.progress = editedGoal.progress;
+
+                      // Save all edited changes to local storage
                       _saveGoalsToLocal();
                       Navigator.pop(context);
                     });
                   },
+                  // Save changes button is to (explicitly) confirm changes before altering the data.
                   child: Text('Save Changes'),
                 ),
               ],
