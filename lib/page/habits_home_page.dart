@@ -6,15 +6,16 @@ import 'package:flutter_material_color_picker/flutter_material_color_picker.dart
 
 class Goal {
   String name;
+  String unitName;
   IconData icon;
   int progress;
   int goal;
   bool isDaily;
   Color color;
   bool isSwipedLeft; // to determine isSwipedLeft property (used for edit/delete gestures)
-
   Goal({
     required this.name,
+    required this.unitName,
     required this.icon,
     this.progress = 0,
     required this.goal,
@@ -22,10 +23,10 @@ class Goal {
     required this.color,
     this.isSwipedLeft = false, // Initialize isSwipedLeft to false by default
   });
-
   factory Goal.fromJson(Map<String, dynamic> json) {
     return Goal(
       name: json['name'],
+      unitName: json['unitName'],
       icon: IconData(json['icon'], fontFamily: 'MaterialIcons'),
       progress: json['progress'],
       goal: json['goal'],
@@ -33,10 +34,10 @@ class Goal {
       color: Color(json['color']),
     );
   }
-
   Map<String, dynamic> toJson() {
     return {
       'name': name,
+      'unitName': unitName,
       'icon': icon.codePoint,
       'progress': progress,
       'goal': goal,
@@ -45,29 +46,25 @@ class Goal {
     };
   }
 }
-
 class GoalsPage extends StatefulWidget {
   const GoalsPage({Key? key}) : super(key: key);
-
   @override
   _GoalsPageState createState() => _GoalsPageState();
 }
-
 class _GoalsPageState extends State<GoalsPage> {
   // default values used if the user does not fill in all parts of the form
   List<Goal> goals = [];
   IconData selectedIcon = Icons.directions_run;
   String goalName = '';
+  String unitName = '';
   int frequency = 1;
   bool isDaily = true;
   Color selectedColor = Colors.lightBlueAccent;
-
   @override
   void initState() {
     super.initState();
     _loadGoalsFromLocal();
   }
-
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -78,68 +75,65 @@ class _GoalsPageState extends State<GoalsPage> {
         itemCount: goals.length,
         itemBuilder: (context, index) {
           Goal goal = goals[index];
-
           return Padding(
             padding: EdgeInsets.symmetric(vertical: 8.0),
             // Adds vertical padding between goals to separate them
-
-          // to add spacing to the left and right sides of each goal. makes each goal more prominent
-          child: Card(
-            shape: RoundedRectangleBorder(
-              borderRadius: BorderRadius.circular(10.0),   // changes border radius
-            ),
-
-            child: Container(
-              height: 80,
-              // Sets the height to match the height of each goal item
-              child: Slidable(
-                actionPane: SlidableDrawerActionPane(),
-                actions: [
-                  Container(
-                    height: 80,
-                    // Sets the height to match the height of each goal item
-                    child: IconSlideAction(
-                      caption: 'Edit',
-                      color: Colors.blue,
-                      icon: Icons.edit,
-                      onTap: () => _editGoal(goal),
+            // to add spacing to the left and right sides of each goal. makes each goal more prominent
+            child: Card(
+              shape: RoundedRectangleBorder(
+                borderRadius: BorderRadius.circular(10.0),   // changes border radius
+              ),
+              child: Container(
+                height: 80,
+                // Sets the height to match the height of each goal item
+                child: Slidable(
+                  actionPane: SlidableDrawerActionPane(),
+                  actions: [
+                    Container(
+                      height: 80,
+                      // Sets the height to match the height of each goal item
+                      child: IconSlideAction(
+                        caption: 'Edit',
+                        color: Colors.blue,
+                        icon: Icons.edit,
+                        onTap: () => _editGoal(goal),
+                      ),
                     ),
-                  ),
-                ],
-                secondaryActions: [
-                  Container(
-                    height: 80,
-                    // Sets the height to match the height of each goal item
-                    child: IconSlideAction(
-                      caption: 'Delete',
-                      color: Colors.red,
-                      icon: Icons.delete,
-                      onTap: () => _deleteGoal(goal),
+                  ],
+                  secondaryActions: [
+                    Container(
+                      height: 80,
+                      // Sets the height to match the height of each goal item
+                      child: IconSlideAction(
+                        caption: 'Delete',
+                        color: Colors.red,
+                        icon: Icons.delete,
+                        onTap: () => _deleteGoal(goal),
+                      ),
                     ),
-                  ),
-                ],
-                child: ListTile(
-                  tileColor: goal.color,
-                  // Sets the tileColor to the color property of the goal
-                  leading: Icon(goal.icon),
-                  title: Text(goal.name),
-                  subtitle: Text('Progress: ${goal.progress}/${goal.goal} (${goal.isDaily ? 'Daily' : 'Weekly'})'),
-                  trailing: IconButton(
-                    icon: Icon(Icons.add),
-                    onPressed: () {
-                      setState(() {
-                        goal.progress++;
-                        if (goal.progress > goal.goal) {
-                          goal.progress = 0;
-                        }
-                      });
-                      _saveGoalsToLocal();
-                    },
+                  ],
+                  child: ListTile(
+                    tileColor: goal.color,
+                    // Sets the tileColor to the color property of the goal
+                    leading: Icon(goal.icon),
+                    title: Text(goal.name),
+                    subtitle: Text('Progress: ${goal.progress}/${goal.goal} ${goal.unitName} (${goal.isDaily ? 'Daily' : 'Weekly'})'),
+                    trailing: IconButton(
+                      icon: Icon(Icons.add),
+                      onPressed: () {
+                        setState(() {
+                          goal.progress++;
+                          if (goal.progress > goal.goal) {
+                            goal.progress = 0;
+                          }
+                        });
+                        _saveGoalsToLocal();
+                      },
+                    ),
                   ),
                 ),
               ),
-            ),
-           ), // extra ) for rounded edges
+            ), // extra ) for rounded edges
           );
         },
       ),
@@ -151,7 +145,6 @@ class _GoalsPageState extends State<GoalsPage> {
       ),
     );
   }
-
   void _editGoal(Goal goal) {
     // the logic of editing the goal
     // todo need to update to use same options as adding a new goal
@@ -192,7 +185,6 @@ class _GoalsPageState extends State<GoalsPage> {
       },
     );
   }
-
   void _deleteGoal(Goal goal) {
     // just removes the goal from screen/device
     setState(() {
@@ -200,17 +192,16 @@ class _GoalsPageState extends State<GoalsPage> {
     });
     _saveGoalsToLocal(); // Save the updated goals list
   }
-
   // new goal form with the most color options. dialog = form.
   // improved color picker by adding 10 shades for each color
   // 190 total color options available now!
   void _showAddGoalDialog(BuildContext context) {
     // Initializes default variables for form fields if the user did not provide any.
     String goalName = '';
+    String unitName = '';
     int frequency = 1;
     bool isDaily = false;
     Color selectedColor = Colors.lightBlueAccent;
-
     // color selection dialog
     // Function to navigate to the color selection step
     void _selectColorStep(StateSetter setState) {
@@ -245,7 +236,6 @@ class _GoalsPageState extends State<GoalsPage> {
         },
       );
     }
-
     // Main dialog/form content to add a new goal/habit to the existing list
     showDialog(
       context: context,
@@ -265,6 +255,14 @@ class _GoalsPageState extends State<GoalsPage> {
                     onChanged: (value) {
                       setState(() {
                         goalName = value;
+                      });
+                    },
+                  ),
+                  TextField(
+                    decoration: InputDecoration(labelText: 'Unit Name'),
+                    onChanged: (value) {
+                      setState(() {
+                        unitName = value;
                       });
                     },
                   ),
@@ -319,6 +317,7 @@ class _GoalsPageState extends State<GoalsPage> {
                       goals.add(
                         Goal(
                           name: goalName,
+                          unitName: unitName,
                           icon: selectedIcon ?? Icons.directions_run, // Uses the user selectedIcon here. Otherwise it uses the default icon if none is selected.
                           goal: frequency,
                           isDaily: isDaily,
@@ -414,7 +413,6 @@ class _GoalsPageState extends State<GoalsPage> {
       },
     );
   }
-
   void _saveGoalsToLocal() {
     SharedPreferences.getInstance().then((prefs) {
       List<String> goalsJson = goals.map((goal) => jsonEncode(goal.toJson())).toList();
@@ -429,7 +427,6 @@ class _GoalsPageState extends State<GoalsPage> {
       print('Error accessing your device local storage: $error');
     });
   }
-
   Future<void> _loadGoalsFromLocal() async {
     SharedPreferences prefs = await SharedPreferences.getInstance();
     List<String>? goalsJson = prefs.getStringList('goals');
@@ -440,7 +437,6 @@ class _GoalsPageState extends State<GoalsPage> {
     }
   }
 }
-
 void main() {
   runApp(MaterialApp(
     home: GoalsPage(),
