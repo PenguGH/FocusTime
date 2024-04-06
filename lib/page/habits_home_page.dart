@@ -145,46 +145,89 @@ class _GoalsPageState extends State<GoalsPage> {
       ),
     );
   }
+
   void _editGoal(Goal goal) {
-    // the logic of editing the goal
-    // todo need to update to use same options as adding a new goal
+    // the logic for editing an existing goal
+
+    // separate text editing controllers for each TextField entry. this stops the cursor from always moving to the beginning when typing.
+    // initializes each instance with the correct text field data and maintains its current cursor position.
+    TextEditingController goalNameController = TextEditingController(text: goal.name); // uses the current goal name to be edited.
+    TextEditingController unitNameController = TextEditingController(text: goal.unitName); // uses the current unit name to be edited.
+
+    // editing goal dialog/form
     showDialog(
       context: context,
       builder: (context) {
-        return AlertDialog(
-          title: Text('Edit Goal'),
-          content: TextField(
-            controller: TextEditingController(text: goal.name), // Displays current goal name
-            onChanged: (value) {
-              setState(() {
-                goal.name = value; // Update the goal name
-              });
-            },
-            decoration: InputDecoration(labelText: 'New Goal Name'),
-          ),
-          actions: [
-            TextButton(
-              onPressed: () {
-                Navigator.pop(context);
-              },
-              child: Text('Cancel'),
-            ),
-            TextButton(
-              onPressed: () {
-                // setState to update state upon change
-                setState(() {
-                  // Save the edited goal
-                  _saveGoalsToLocal();
-                });
-                Navigator.pop(context);
-              },
-              child: Text('Save'),
-            ),
-          ],
+        // StatefulBuilder to update immediately upon successful changes saved
+        return StatefulBuilder(
+          builder: (BuildContext context, StateSetter setState) {
+            return AlertDialog(
+              title: Text('Edit Goal'),
+              content: Column(
+                crossAxisAlignment: CrossAxisAlignment.start,
+                mainAxisSize: MainAxisSize.min,
+                children: [
+                  TextField(
+                    controller: goalNameController,
+                    onChanged: (value) {
+                      setState(() {
+                        goal.name = value;
+                      });
+                    },
+                    decoration: InputDecoration(labelText: 'New Goal Name'),
+                  ),
+                  TextField(
+                    controller: unitNameController,
+                    onChanged: (value) {
+                      setState(() {
+                        goal.unitName = value;
+                      });
+                    },
+                    decoration: InputDecoration(labelText: 'New Unit Name'),
+                  ),
+                  Padding(
+                    padding: const EdgeInsets.all(8.0),
+                    child: ElevatedButton(
+                      onPressed: () {
+                        setState(() {
+                          // Logic for resetting progress data; just resets it back to 0.
+                          goal.progress = 0;
+
+                          // automatically reset progress upon onPressed and saves changes. (implicitly saves data)
+                          // _saveGoalsToLocal();
+                        });
+                      },
+                      child: Text('Reset Progress'),
+                    ),
+                  ),
+                ],
+              ),
+              actions: [
+                TextButton(
+                  onPressed: () {
+                    Navigator.pop(context);
+                  },
+                  child: Text('Cancel'),
+                ),
+                TextButton(
+                  onPressed: () {
+                    setState(() {
+                      // Logic for saving edit changes. Changes will only be saved if there were changes made and this Save Changes button was pressed.
+                      // Save changes button is to (explicitly) confirm changes before altering the data.
+                      _saveGoalsToLocal();
+                      Navigator.pop(context);
+                    });
+                  },
+                  child: Text('Save Changes'),
+                ),
+              ],
+            );
+          },
         );
       },
     );
   }
+
   void _deleteGoal(Goal goal) {
     // just removes the goal from screen/device
     setState(() {
@@ -192,6 +235,7 @@ class _GoalsPageState extends State<GoalsPage> {
     });
     _saveGoalsToLocal(); // Save the updated goals list
   }
+
   // new goal form with the most color options. dialog = form.
   // improved color picker by adding 10 shades for each color
   // 190 total color options available now!
@@ -340,6 +384,7 @@ class _GoalsPageState extends State<GoalsPage> {
   }
 
   // used to select an icon and goal type
+  // 5 common icons/goal types to start. and 1 icon (other) used for all other custom goals.
   Widget _buildIconDropdownWidget(StateSetter setState) {
     return DropdownButton<IconData>(
       value: selectedIcon,
@@ -413,6 +458,8 @@ class _GoalsPageState extends State<GoalsPage> {
       },
     );
   }
+
+  // saving and loading data from local storage on device
   void _saveGoalsToLocal() {
     SharedPreferences.getInstance().then((prefs) {
       List<String> goalsJson = goals.map((goal) => jsonEncode(goal.toJson())).toList();
@@ -437,6 +484,8 @@ class _GoalsPageState extends State<GoalsPage> {
     }
   }
 }
+
+// this is the home page. aka the first page you see when you open the app.
 void main() {
   runApp(MaterialApp(
     home: GoalsPage(),
