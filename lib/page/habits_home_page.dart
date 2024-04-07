@@ -416,7 +416,7 @@ class _GoalsPageState extends State<GoalsPage> {
                           startDate: DateTime.now(), // uses the current Date and Time for the startDate
                         ),
                       );
-                      print('Number of goals after adding: ${goals.length}'); // to check if adding goals works properly
+                      // print('Number of goals after adding: ${goals.length}'); // to check if adding goals works properly
                       _saveGoalsToLocal(); // Save the updated goals list
                       Navigator.pop(context); // Close the dialog
                     });
@@ -501,7 +501,7 @@ class _GoalsPageState extends State<GoalsPage> {
       onChanged: (value) {
         setState(() {
           selectedIcon = value!;
-          print("Selected Icon: $selectedIcon");
+          // print("Selected Icon: $selectedIcon");
         });
       },
     );
@@ -516,10 +516,10 @@ class _GoalsPageState extends State<GoalsPage> {
           // Rebuilds the UI in real time after adding and saving goals to the list
         });
       }).catchError((error) {
-        print('Error saving goals to your device local storage: $error');
+          print('Error saving goals to your device local storage: $error');
       });
     }).catchError((error) {
-      print('Error accessing your device local storage: $error');
+        print('Error accessing your device local storage: $error');
     });
   }
 
@@ -543,9 +543,9 @@ class _GoalsPageState extends State<GoalsPage> {
         if (!isSameDay(goal.startDate, currentDate)) {
           // updates state
           setState(() {
-            print(goal.startDate);
-            print(currentDate);
-            print("");
+            // print(goal.startDate);
+            // print(currentDate);
+            // print("");
             goal.progress = 0; // Its a new day
             goal.startDate = currentDate; // updates startDate to current date and time for daily goals
           });
@@ -555,9 +555,9 @@ class _GoalsPageState extends State<GoalsPage> {
         // If its the same week, the data is not reset. If its a new week, the data resets.
         if (!isSameWeek(goal.startDate, currentDate)) {
           setState(() {
-            print(goal.startDate);
-            print(currentDate);
-            print("");
+            // print(goal.startDate);
+            // print(currentDate);
+            // print("");
             goal.progress = 0; // Its a new week
             goal.startDate = currentDate; // updates startDate to current date and time for weekly goals
           });
