@@ -20,7 +20,10 @@ class Goal {
   bool isDaily;
   Color color;
   bool isSwipedLeft; // to determine isSwipedLeft property (used for edit/delete gestures)
+  DateTime startDate; // This is when you added and started your habit. It is updated daily for daily goals and weekly for weekly goals. the new startDate is used in order to know when to reset daily and weekly goals. by comparing the new startDate with the current date and seeing if its been a day or week already.
+
   Goal({
+    // required fields
     required this.name,
     required this.unitName,
     required this.icon,
@@ -29,7 +32,9 @@ class Goal {
     required this.isDaily,
     required this.color,
     this.isSwipedLeft = false, // Initialize isSwipedLeft to false by default
+    required this.startDate, // Keeps track of when the goal was created/last reset. to then automatically reset progress for daily and weekly goals when its the next day and the next week respectively.
   });
+
   factory Goal.fromJson(Map<String, dynamic> json) {
     return Goal(
       name: json['name'],
@@ -39,8 +44,10 @@ class Goal {
       goal: json['goal'],
       isDaily: json['isDaily'],
       color: Color(json['color']),
+      startDate: DateTime.parse(json['startDate']), // Parses in startDate as json format
     );
   }
+
   Map<String, dynamic> toJson() {
     return {
       'name': name,
@@ -50,14 +57,17 @@ class Goal {
       'goal': goal,
       'isDaily': isDaily,
       'color': color.value,
+      'startDate': startDate.toIso8601String(), // converts the startDate into to an ISO 8601 string (for date and time format)
     };
   }
 }
+
 class GoalsPage extends StatefulWidget {
   const GoalsPage({Key? key}) : super(key: key);
   @override
   _GoalsPageState createState() => _GoalsPageState();
 }
+
 class _GoalsPageState extends State<GoalsPage> {
   // default values used if the user does not fill in all parts of the form
   List<Goal> goals = [];
@@ -165,11 +175,14 @@ class _GoalsPageState extends State<GoalsPage> {
       unitName: goal.unitName,
       progress: goal.progress,
 
-      // if I want to make these available for editing in the future
+      // other required attributes of a goal.
+      // currently these cannot be edited, but I might make these available for editing in the future.
+      // currently just delete the goal and create a new one for the same effect.
       icon: goal.icon,
       goal: goal.goal,
       isDaily: goal.isDaily,
       color: goal.color,
+      startDate: goal.startDate,
     );
 
     // if two objects are using the same text editing controller, it causes the cursor to move to the beginning of the textbox when typing.
@@ -278,6 +291,7 @@ class _GoalsPageState extends State<GoalsPage> {
     int frequency = 1;
     bool isDaily = false;
     Color selectedColor = Colors.lightBlueAccent;
+
     // color selection dialog
     // Function to navigate to the color selection step
     void _selectColorStep(StateSetter setState) {
@@ -312,6 +326,7 @@ class _GoalsPageState extends State<GoalsPage> {
         },
       );
     }
+
     // Main dialog/form content to add a new goal/habit to the existing list
     showDialog(
       context: context,
@@ -398,6 +413,7 @@ class _GoalsPageState extends State<GoalsPage> {
                           goal: frequency,
                           isDaily: isDaily,
                           color: selectedColor,
+                          startDate: DateTime.now(), // uses the current Date and Time for the startDate
                         ),
                       );
                       print('Number of goals after adding: ${goals.length}'); // to check if adding goals works properly
@@ -506,14 +522,62 @@ class _GoalsPageState extends State<GoalsPage> {
       print('Error accessing your device local storage: $error');
     });
   }
+
   Future<void> _loadGoalsFromLocal() async {
     SharedPreferences prefs = await SharedPreferences.getInstance();
     List<String>? goalsJson = prefs.getStringList('goals');
     if (goalsJson != null) {
       setState(() {
         goals = goalsJson.map((json) => Goal.fromJson(jsonDecode(json))).toList();
+        _resetGoalsProgress(); // Auto resets daily and weekly goal progress if the condition of it being the next day or the next week is met.
       });
     }
+  }
+
+  void _resetGoalsProgress() {
+    DateTime currentDate = DateTime.now();
+    goals.forEach((goal) {
+      if (goal.isDaily) {
+        // If it is a daily goal, check and compare if the startDate day is not the same as the current day.
+        // If its the same day, the data is not reset. If its a new day, the data resets.
+        if (!isSameDay(goal.startDate, currentDate)) {
+          // updates state
+          setState(() {
+            print(goal.startDate);
+            print(currentDate);
+            print("");
+            goal.progress = 0; // Its a new day
+            goal.startDate = currentDate; // updates startDate to current date and time for daily goals
+          });
+        }
+      } else {
+        // If it is a weekly goal, check and compare if the startDate week is not the same as the currentDate's week.
+        // If its the same week, the data is not reset. If its a new week, the data resets.
+        if (!isSameWeek(goal.startDate, currentDate)) {
+          setState(() {
+            print(goal.startDate);
+            print(currentDate);
+            print("");
+            goal.progress = 0; // Its a new week
+            goal.startDate = currentDate; // updates startDate to current date and time for weekly goals
+          });
+        }
+      }
+    });
+    _saveGoalsToLocal(); // Save changes to local
+  }
+
+  // boolean to compare if two dates are on the same day. the year, month, and day have to both be the same to be the same day.
+  bool isSameDay(DateTime date1, DateTime date2) {
+    return date1.year == date2.year &&
+        date1.month == date2.month &&
+        date1.day == date2.day;
+  }
+
+  // boolean to compare if two dates are on the same week.
+  bool isSameWeek(DateTime date1, DateTime date2) {
+    int weekDifference = date2.difference(date1).inDays ~/ 7;
+    return weekDifference == 0; // If the difference of the two dates is 0, then they are in the same week. if the difference is greater than 0 then it is not the same week anymore.
   }
 }
 
