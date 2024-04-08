@@ -12,13 +12,13 @@ import 'package:flutter_material_color_picker/flutter_material_color_picker.dart
 // plenty of sleep and water, etc to maximize your gains.
 class Goal {
   // properties of each goal
-  String name;
-  String unitName;
-  IconData icon;
-  int progress;
-  int goal;
-  bool isDaily;
-  Color color;
+  String name; // name of the goal
+  String unitName; // unit of measurement to quantify and meet the goal
+  IconData icon; // to associate the goal visually
+  int progress; // current progress
+  int goal; // the goal value you're trying to reach everyday or every week
+  bool isDaily; // daily or weekly goal
+  Color color; // to visually separate goals
   bool isSwipedLeft; // to determine isSwipedLeft property (used for edit/delete gestures)
   DateTime startDate; // This is when you added and started your habit. It is updated daily for daily goals and weekly for weekly goals. the new startDate is used in order to know when to reset daily and weekly goals. by comparing the new startDate with the current date and seeing if its been a day or week already.
 
@@ -176,13 +176,14 @@ class _GoalsPageState extends State<GoalsPage> {
       progress: goal.progress,
 
       // other required attributes of a goal.
+      startDate: goal.startDate,
+
       // currently these cannot be edited, but I might make these available for editing in the future.
       // currently just delete the goal and create a new one for the same effect.
       icon: goal.icon,
       goal: goal.goal,
       isDaily: goal.isDaily,
       color: goal.color,
-      startDate: goal.startDate,
     );
 
     // if two objects are using the same text editing controller, it causes the cursor to move to the beginning of the textbox when typing.
@@ -289,7 +290,7 @@ class _GoalsPageState extends State<GoalsPage> {
     String goalName = '';
     String unitName = '';
     int frequency = 1;
-    bool isDaily = false;
+    bool isDaily = true;
     Color selectedColor = Colors.lightBlueAccent;
 
     // color selection dialog
@@ -390,7 +391,7 @@ class _GoalsPageState extends State<GoalsPage> {
                     onPressed: () {
                       _selectColorStep(setState);
                     },
-                    child: Text('Select Color'),
+                    child: Text('Select Color (Required)'),
                   ),
                 ],
               ),
@@ -410,7 +411,7 @@ class _GoalsPageState extends State<GoalsPage> {
                           name: goalName,
                           unitName: unitName,
                           icon: selectedIcon ?? Icons.directions_run, // Uses the user selectedIcon here. Otherwise it uses the default icon if none is selected.
-                          goal: frequency,
+                          goal: frequency, // how many times you want to do this habit in a day or in a weeks time
                           isDaily: isDaily,
                           color: selectedColor,
                           startDate: DateTime.now(), // uses the current Date and Time for the startDate

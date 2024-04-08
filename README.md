@@ -1,4 +1,5 @@
 # focus_time
+Become a Productivity Wizard today by downloading FocusTime!
 
 A new Flutter project.
 
