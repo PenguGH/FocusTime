@@ -63,11 +63,13 @@ class _TodoPageState extends State<TodoPage> {
     _loadTasksFromLocal();
   }
   @override
+  // build method re renders UI based on changes in State
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
         title: Text("Tasks"),
       ),
+      // Flutter widget tree DOM rebuilds new list view changes and UI changes automatically based on updates in the State.
       body: ListView.builder(
         itemCount: tasks.length,
         itemBuilder: (context, index) {
@@ -126,7 +128,13 @@ class _TodoPageState extends State<TodoPage> {
                   child: ListTile(
                     tileColor: task.color,
                     // Sets the tileColor to the color property of the task
-                    title: Text(task.name),
+                    title: Text(
+                      task.name,
+                      style: TextStyle(
+                        // Ternary operator to conditionally apply a strike through decoration based on if the task is done and plain text if the task is not done.
+                        decoration: task.isChecked ? TextDecoration.lineThrough : null,
+                    ),
+                    ),
                     subtitle: Text(
                       task.dueDate.isNotEmpty ? 'Deadline: ${task.dueDate}' : 'No Deadline Specified',
                     ),
@@ -137,7 +145,7 @@ class _TodoPageState extends State<TodoPage> {
                         if(newValue != null) { // check for nullability
                           // update state
                           setState(() {
-                            task.isChecked = newValue;
+                            task.isChecked = newValue; // updates isChecked property value of a task object
                           });
                         }
                         _saveTasksToLocal(); // update checkmark task status to device
