@@ -71,6 +71,8 @@ flutter:
   assets:
     - assets/logo3_no_background.png
     - assets/logo4_small_no_background.png
+    - assets/app_icon_logo_2.png
+    - assets/app_icon_logo_2_no_background.png
   # - images/a_dot_burr.jpeg
   # - images/a_dot_ham.jpeg
 

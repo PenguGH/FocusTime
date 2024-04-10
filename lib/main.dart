@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:focus_time/page/splash_screen.dart';
 import 'package:focus_time/page/habits_home_page.dart';
 import 'package:focus_time/page/todo_page.dart';
 import 'package:provider/provider.dart';
@@ -51,7 +52,8 @@ class MyApp extends StatelessWidget {
           colorScheme: ColorScheme.fromSeed(seedColor: Colors.blue.shade300),
           useMaterial3: true,
         ),
-        home: const MyHomePage(title: 'FocusTime Logo Here'),
+        // home: const MyHomePage(title: 'FocusTime Logo Here'), // before it would go to the home page/habits page first.
+        home: const SplashScreen(), // Now it starts with the SplashScreen when you open the app. And then it goes to the home screen after 2 seconds.
       ),
     );
   }
