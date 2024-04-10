@@ -128,8 +128,21 @@ class _MyHomePageState extends State<MyHomePage> {
         backgroundColor: Theme.of(context).colorScheme.inversePrimary,
         // Here we take the value from the MyHomePage object that was created by
         // the App.build method, and use it to set our appbar title.
-        title: Text(widget.title),
-      ),
+        title: const Row(
+              children: [
+                Expanded(
+                  child: Image(
+                    // successfully added an image to the top App Bar
+                    image: AssetImage('assets/logo4_small_no_background.png'),
+                    height: 60, // Adjusts the height of image
+                    width: 40, // Adjusts the width of image
+                  ),
+                ),
+              // Text(widget.title)
+            ]
+          ),
+        ),
+
       body: Center(
         // Center is a layout widget. It takes a single child and positions it
         // in the middle of the parent.
