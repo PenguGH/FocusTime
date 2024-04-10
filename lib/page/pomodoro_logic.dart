@@ -21,14 +21,18 @@ import 'dart:async';
 import 'package:flutter/foundation.dart';
 
 class PomodoroLogic extends ChangeNotifier {
+  // initialization
   int _duration = 0;
   int _currentTime = 0;
   Timer? _timer;
-  bool _isRunning = false;
+  bool _isRunning = false; // to determine the timer's state. if the timer is running or if its paused
+  bool _isWorkSession = false; // to determine if it is a work session or a break session
 
+  // getters
   int get duration => _duration;
   int get currentTime => _currentTime;
   bool get isRunning => _isRunning;
+  bool get isWorkSession => _isWorkSession;
 
   void startTimer(int durationInSeconds) {
     _duration = durationInSeconds;
@@ -39,7 +43,7 @@ class PomodoroLogic extends ChangeNotifier {
         _isRunning = false;
         notifyListeners();
       } else {
-        _currentTime--;
+        _currentTime--; // decrement timer by 1 second, for every second of time that passes
         notifyListeners();
       }
     });
@@ -62,5 +66,13 @@ class PomodoroLogic extends ChangeNotifier {
 
   void resumeTimer() {
     startTimer(_currentTime);
+  }
+
+  void workSession() {
+    _isWorkSession = true;
+  }
+
+  void breakSession() {
+    _isWorkSession = false;
   }
 }

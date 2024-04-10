@@ -12,29 +12,30 @@ class PomodoroPage extends StatelessWidget {
     final pomodoroLogic = Provider.of<PomodoroLogic>(context);
 
     return Scaffold(
-      appBar: AppBar(
-        title: Text("Pomodoro Timer"),
-      ),
+      // appBar: AppBar(
+      //   title: Text(""),
+      // ),
       body: Center(
         child: Column(
           mainAxisAlignment: MainAxisAlignment.center,
           children: [
             Text(
-              'Pomodoro',
+                '${pomodoroLogic.isWorkSession ? 'Work Session' : 'Break Session'}',
+                style: TextStyle(fontSize: 40),
+              ),
+            Text(
+              pomodoroLogic.isRunning ? 'Running' : 'Paused',
               style: TextStyle(fontSize: 40),
             ),
             SizedBox(height: 20),
-            // Text(
-            //   'Time Left: ${formatTime(pomodoroLogic.currentTime)}',
-            //   style: TextStyle(fontSize: 40),
-            // ),
         CircularPercentIndicator(
-              radius: 200.0,
+          // outer circle of timer to visually show the remaining time left
+              radius: 275.0,
               lineWidth: 15.0,
               percent: pomodoroLogic.currentTime / pomodoroLogic.duration,
               center: Text(
                 formatTime(pomodoroLogic.currentTime),
-                style: TextStyle(fontSize: 55),
+                style: TextStyle(fontSize: 75),
               ),
               progressColor: Colors.blue,
             ),
@@ -42,50 +43,76 @@ class PomodoroPage extends StatelessWidget {
             Row(
               mainAxisAlignment: MainAxisAlignment.center,
               children: [
-                ElevatedButton(
-                  onPressed: () {
-                    if (!pomodoroLogic.isRunning) {
-                      pomodoroLogic.startTimer(25 * 60); // Starts a 25-minute work timer
-                    }
-                  },
-                  child: Text('Start Work'),
+                // expanded widget allows all the shared widgets to take up space proportional to the amount of space available
+                Expanded(
+                  child: ElevatedButton(
+                    onPressed: () {
+                      if (!pomodoroLogic.isRunning) {
+                        pomodoroLogic.startTimer(25 * 60); // Starts a 25-minute work timer
+                        pomodoroLogic.workSession();
+                      }
+                    },
+                    child: Text('Start Work'),
+                  ),
                 ),
-                SizedBox(width: 20),
-                ElevatedButton(
-                  onPressed: () {
-                    if (!pomodoroLogic.isRunning) {
-                      pomodoroLogic.startTimer(5 * 60); // Starts a 5-minute break timer
-                    }
-                  },
-                  child: Text('Start Break'),
+                // SizedBox(width: 20),
+                Expanded(
+                  child: ElevatedButton(
+                    onPressed: () {
+                      if (!pomodoroLogic.isRunning) {
+                        pomodoroLogic.startTimer(5 * 60); // Starts a 5-minute break timer (short break)
+                        pomodoroLogic.breakSession();
+                      }
+                    },
+                    child: Text('Short Break'),
+                  ),
+                ),
+                // SizedBox(width: 20),
+                Expanded(
+                  child: ElevatedButton(
+                    onPressed: () {
+                      if (!pomodoroLogic.isRunning) {
+                        pomodoroLogic.startTimer(15 * 60); // Starts a 15-minute break timer (long break)
+                        pomodoroLogic.breakSession();
+                      }
+                    },
+                    child: Text('Long Break'),
+                  ),
                 ),
               ],
             ),
-            SizedBox(height: 20),
-            ElevatedButton(
-              onPressed: () {
-                pomodoroLogic.cancelTimer(); // Cancel and set the timer to zero
-              },
-              child: Text('Cancel Timer'),
-            ),
-            SizedBox(height: 20),
-            ElevatedButton(
-              onPressed: () {
-                if (pomodoroLogic.isRunning) {
-                  pomodoroLogic.pauseTimer(); // Pauses the timer
-                } else {
-                  pomodoroLogic.resumeTimer(); // Resumes the timer
-                }
-              },
-              child: Row(
-                // row to display icon and text in the same button
-                mainAxisSize: MainAxisSize.min,
-                children: [
-                  Icon(pomodoroLogic.isRunning ? Icons.pause : Icons.play_arrow), // Icon changes dynamically depending on the current timer's state
-                  SizedBox(width: 8), // To add spacing between the icon and text
-                  Text(pomodoroLogic.isRunning ? 'Pause Timer' : 'Resume Timer'),
-                ],
-              ),
+            SizedBox(height: 20), // vertical spacing
+            Row(
+              children: [
+                Expanded(
+                  child: ElevatedButton(
+                    onPressed: () {
+                      if (pomodoroLogic.isRunning) {
+                        pomodoroLogic.pauseTimer(); // Pauses the timer
+                      } else {
+                        pomodoroLogic.resumeTimer(); // Resumes the timer
+                      }
+                    },
+                    child: Row(
+                      // row to display icon and text in the same button
+                      mainAxisSize: MainAxisSize.min,
+                      children: [
+                        Icon(pomodoroLogic.isRunning ? Icons.pause : Icons.play_arrow), // Icon changes dynamically depending on the current timer's state
+                        SizedBox(width: 8), // To add spacing between the icon and text
+                        Text(pomodoroLogic.isRunning ? 'Pause Timer' : 'Resume Timer'),
+                      ],
+                    ),
+                  ),
+                ),
+                Expanded(
+                  child: ElevatedButton(
+                    onPressed: () {
+                      pomodoroLogic.cancelTimer(); // Cancel and set the timer to zero
+                    },
+                    child: Text('Cancel Timer'),
+                  ),
+                ),
+              ],
             ),
           ],
         ),
