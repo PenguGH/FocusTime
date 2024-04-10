@@ -1,7 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:focus_time/page/habits_home_page.dart';
 import 'package:focus_time/page/todo_page.dart';
-// import 'package:focus_time/page/music_page.dart';
 import 'package:provider/provider.dart';
 import 'package:focus_time/page/pomodoro_page.dart';
 import 'package:focus_time/page/pomodoro_logic.dart';
@@ -99,7 +98,6 @@ class _MyHomePageState extends State<MyHomePage> {
     GoalsPage(), // Goals = To achieve something long term that you set out to accomplish.
     // A way to achieve those goals, is by building habits. Ideally short term habits overtime build up into Long term Habits that stick and become part of your daily life and routine.
     TodoPage(),
-    // MusicPage(),
     PomodoroPage(),
   ];
 
@@ -184,10 +182,6 @@ class _MyHomePageState extends State<MyHomePage> {
             icon: Icon(Icons.checklist),
             label: "Todo",
           ),
-          // BottomNavigationBarItem(
-          //   icon: Icon(Icons.library_music_sharp),
-          //   label: "Music",
-          // ),
           BottomNavigationBarItem(
             icon: Icon(Icons.access_time_filled_rounded),
             label: "Pomodoro",
