@@ -41,6 +41,8 @@ dependencies:
   flutter_colorpicker: ^0.4.0
   flutter_slidable: ^0.6.0
   flutter_material_color_picker: ^1.2.0
+  provider: ^5.0.0
+  percent_indicator: ^3.0.0
 
 dev_dependencies:
   flutter_test:
