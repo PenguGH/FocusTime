@@ -1,4 +1,22 @@
 // logic v5
+// Pomodoro timer is used to help you get work done and take much needed breaks.
+// It helps you focus and lock in to the tasks that you need to do!
+// The point of the pomodoro technique is to get you to be more disciplined and consistent in slowly making progress on your work! :)
+// Slow incremental progress adds up over time!
+
+// Pomodoro logic:
+// 1 full pomodoro session consists of 4 parts:
+// Part 1: 25 min of work and then a 5 min break
+// Part 2: 25 min of work and then a 5 min break
+// Part 3: 25 min of work and then a 5 min break
+// Part 4: 25 min of work and then a 15-30 min break. (this is a longer break on the 4th part of the pomodoro cycle to give you a little more of a break before starting the next pomodoro session.
+// During the work timer: you should focus on making progress on your work and avoid distractions.
+// During the break timer: you should go and stretch, walk around, use the restroom, and step away from your work area.
+// After the break you can come back to work recharged!
+
+// total: 1 pomodoro session:
+// 100 minutes of work
+// 30-45 minutes of break. low end to high end. depends how much of a break you need.
 import 'dart:async';
 import 'package:flutter/foundation.dart';
 
