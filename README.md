@@ -2,7 +2,7 @@
 Become a Productivity Wizard today by downloading FocusTime!
 Improve your life by building life long habits.
 Get tasks done and cross them off your todo list.
-Focus and lock in on tasks at hand by using the pomodoro timer.
+Focus and lock in on tasks at hand by using the pomodoro timer to know when to work and when to take short breaks.
 
 A new Flutter project.
 

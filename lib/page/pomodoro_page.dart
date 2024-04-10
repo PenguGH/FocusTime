@@ -77,7 +77,15 @@ class PomodoroPage extends StatelessWidget {
                   pomodoroLogic.resumeTimer(); // Resumes the timer
                 }
               },
-              child: Text(pomodoroLogic.isRunning ? 'Pause Timer' : 'Resume Timer'), // changes depending on the current timer state
+              child: Row(
+                // row to display icon and text in the same button
+                mainAxisSize: MainAxisSize.min,
+                children: [
+                  Icon(pomodoroLogic.isRunning ? Icons.pause : Icons.play_arrow), // Icon changes dynamically depending on the current timer's state
+                  SizedBox(width: 8), // To add spacing between the icon and text
+                  Text(pomodoroLogic.isRunning ? 'Pause Timer' : 'Resume Timer'),
+                ],
+              ),
             ),
           ],
         ),
