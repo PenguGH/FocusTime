@@ -67,6 +67,8 @@ class _TodoPageState extends State<TodoPage> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
+        // These are tasks that you need to get done soon. Either today, tomorrow, next week, whenever. just to label some deadline for a task you have to do in the immediate near future.
+        // By listing out all your to do items in a to do list; visually you can see what needs to be done, when it needs to be done, what tasks are due soon, etc. and then you can work accordingly and strategically to finish the higher importance tasks first.
         title: Text("Tasks"),
       ),
       // Flutter widget tree DOM rebuilds new list view changes and UI changes automatically based on updates in the State.

@@ -34,13 +34,13 @@
 //                 IconButton(
 //                   icon: Icon(Icons.play_arrow),
 //                   onPressed: () {
-//                     // Implement play functionality
+//                     // play functionality
 //                   },
 //                 ),
 //                 IconButton(
 //                   icon: Icon(Icons.pause),
 //                   onPressed: () {
-//                     // Implement pause functionality
+//                     // pause functionality
 //                   },
 //                 ),
 //               ],

@@ -52,6 +52,14 @@ class PomodoroPage extends StatelessWidget {
                         pomodoroLogic.workSession();
                       }
                     },
+                    style: ElevatedButton.styleFrom(
+                      foregroundColor: Colors.white, backgroundColor: Colors.blue, // text color
+                      padding: EdgeInsets.symmetric(horizontal: 20, vertical: 10), // padding
+                      shape: RoundedRectangleBorder(
+                        borderRadius: BorderRadius.circular(10), // rounded corners
+                      ),
+                      elevation: 3, // elevation
+                    ),
                     child: Text('Start Work'),
                   ),
                 ),
@@ -64,10 +72,17 @@ class PomodoroPage extends StatelessWidget {
                         pomodoroLogic.breakSession();
                       }
                     },
+                    style: ElevatedButton.styleFrom(
+                      foregroundColor: Colors.white, backgroundColor: Colors.orangeAccent, // text color
+                      padding: EdgeInsets.symmetric(horizontal: 20, vertical: 10), // padding
+                      shape: RoundedRectangleBorder(
+                        borderRadius: BorderRadius.circular(10), // rounded corners
+                      ),
+                      elevation: 3, // elevation
+                    ),
                     child: Text('Short Break'),
                   ),
                 ),
-                // SizedBox(width: 20),
                 Expanded(
                   child: ElevatedButton(
                     onPressed: () {
@@ -76,6 +91,14 @@ class PomodoroPage extends StatelessWidget {
                         pomodoroLogic.breakSession();
                       }
                     },
+                    style: ElevatedButton.styleFrom(
+                      foregroundColor: Colors.white, backgroundColor: Colors.lightBlueAccent, // text color
+                      padding: EdgeInsets.symmetric(horizontal: 20, vertical: 10), // padding
+                      shape: RoundedRectangleBorder(
+                        borderRadius: BorderRadius.circular(10), // rounded corners
+                      ),
+                      elevation: 3, // elevation
+                    ),
                     child: Text('Long Break'),
                   ),
                 ),
@@ -93,6 +116,14 @@ class PomodoroPage extends StatelessWidget {
                         pomodoroLogic.resumeTimer(); // Resumes the timer
                       }
                     },
+                    style: ElevatedButton.styleFrom(
+                      foregroundColor: Colors.white, backgroundColor: Colors.green, // text color
+                      padding: EdgeInsets.symmetric(horizontal: 20, vertical: 10), // padding
+                      shape: RoundedRectangleBorder(
+                        borderRadius: BorderRadius.circular(10), // rounded corners
+                      ),
+                      elevation: 3, // elevation
+                    ),
                     child: Row(
                       // row to display icon and text in the same button
                       mainAxisSize: MainAxisSize.min,
@@ -109,6 +140,14 @@ class PomodoroPage extends StatelessWidget {
                     onPressed: () {
                       pomodoroLogic.cancelTimer(); // Cancel and set the timer to zero
                     },
+                    style: ElevatedButton.styleFrom(
+                      foregroundColor: Colors.white, backgroundColor: Colors.red, // text color
+                      padding: EdgeInsets.symmetric(horizontal: 20, vertical: 10), // padding
+                      shape: RoundedRectangleBorder(
+                        borderRadius: BorderRadius.circular(10), // rounded corners
+                      ),
+                      elevation: 3, // elevation
+                    ),
                     child: Text('Cancel Timer'),
                   ),
                 ),

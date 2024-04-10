@@ -31,6 +31,7 @@ class MyApp extends StatelessWidget {
     return ChangeNotifierProvider(
       create: (_) => PomodoroLogic(), // Create an instance of your model
       child: MaterialApp(
+        debugShowCheckedModeBanner: false, // removes the debug banner from top right hand corner
         title: 'FocusTime',
         theme: ThemeData(
           // This is the theme of your application.

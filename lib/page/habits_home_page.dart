@@ -86,6 +86,8 @@ class _GoalsPageState extends State<GoalsPage> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
+        // These are good habits that you want to build over time. Or bad habits that you want to get rid of. Work towards your habit goals and journey by trying to meet your daily and weekly goal's frequency values!
+        // Some say it takes 21 days to build a habit. But expect to spend more time until your habit is part of your routine and daily life.
         title: Text("Goals"),
       ),
       body: ListView.builder(
