@@ -18,6 +18,10 @@ Use the todo list page to add, edit/update, and delete todo list items.
 
 Use the pomodoro timer to help you focus and get work done with the work timer and take breaks with the break timer. There is a short break timer and a long break timer.
 
+The Pomodoro Study Technique explained:
+![PomodoroTechnique](https://media.hswstatic.com/eyJidWNrZXQiOiJjb250ZW50Lmhzd3N0YXRpYy5jb20iLCJrZXkiOiJnaWZcL3BvbW9kb3JvMy5qcGciLCJlZGl0cyI6eyJyZXNpemUiOnsid2lkdGgiOjgyOH0sInRvRm9ybWF0IjoiYXZpZiJ9fQ==)
+https://science.howstuffworks.com/life/inside-the-mind/human-brain/pomodoro-technique.htm
+
 Note: Habit goals and todo list tasks are only stored on the user's local device. There are no account signups needed and no storage on the cloud.
 It’s time to focus today and become a productivity wizard!
 
