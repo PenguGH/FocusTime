@@ -12,9 +12,11 @@ FocusTime: A productivity app to reach daily/weekly habits by logging your progr
 
 FocusTime is a multi-utility productivity app. With many different tools to help you improve your productivity and focus. Instead of downloading 3 separate apps, just download this one single app.
 
-Use the habits page to add, edit/update, and delete habits. Daily habit progress resets daily and weekly habit progress resets weekly.
+Both the Habits page and the Todo list page support CRUD operations.
 
-Use the todo list page to add, edit/update, and delete todo list items.
+Use the habits page to add, edit, update, and delete habits. Daily habit progress resets daily and weekly habit progress resets weekly.
+
+Use the todo list page to add, edit, update, and delete todo list items.
 
 Use the pomodoro timer to help you focus and get work done with the work timer and take breaks with the break timer. There is a short break timer and a long break timer.
 
@@ -25,4 +27,4 @@ https://science.howstuffworks.com/life/inside-the-mind/human-brain/pomodoro-tech
 Note: Habit goals and todo list tasks are only stored on the user's local device. There are no account signups needed and no storage on the cloud.
 It’s time to focus today and become a productivity wizard!
 
-Users are recommended to open the app, use the habits page, use the todo list page, and then use the Pomodoro timer page in order.
+Users are recommended to first open the app, use the habits page to update their habit progress, use the todo list page to know what tasks need to be done, and then use the Pomodoro study timer page in order. Users are also recommended to listen to calm relaxing music such as lofi hip hop while studying to stay focused.
