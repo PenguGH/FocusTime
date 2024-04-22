@@ -4,7 +4,7 @@ Improve your life by building life long habits.
 Get tasks done and cross them off your todo list.
 Focus and lock in on tasks at hand by using the pomodoro timer to know when to work and when to take short breaks.
 
-Everything is currently stored only on local storage on your mobile device. 
+Everything is currently stored only on local storage on your mobile device.
 Everyone can have their own unique experience using this app by adding their own habits they want to build and tasks they need to get done!
 
 
