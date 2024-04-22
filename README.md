@@ -1,4 +1,3 @@
-# focus_time
 ![FocusTimeLogo](assets/logo4_small_no_background.png)
 # Link to download my app on the Google Play Store: https://play.google.com/store/apps/details?id=com.PenguDev.app.focus_time
 Become a Productivity Wizard today by downloading FocusTime!
