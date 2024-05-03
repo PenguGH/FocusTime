@@ -28,3 +28,5 @@ Note: Habit goals and todo list tasks are only stored on the user's local storag
 It’s time to focus today and become a productivity wizard!
 
 Users are recommended to first open the app, use the habits page to update their habit progress, use the todo list page to know what tasks need to be done, and then use the Pomodoro study timer page in order. Users are also recommended to listen to calm relaxing music such as lofi hip hop while studying to stay focused.
+
+Useful Guide to help build habits: https://jamesclear.com/habit-guide
