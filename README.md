@@ -3,9 +3,9 @@
 # Link to Download my app on the Google Play Store: https://play.google.com/store/apps/details?id=com.PenguDev.app.focus_time
 
 # Screenshots
-<img src="assets/Screenshot1.png" width="300"> <img src="assets/Screenshot2.png" width="300"> <img src="assets/Screenshot4.png" width="300">
-<img src="assets/Screenshot5.png" width="300"> <img src="assets/Screenshot6.png" width="300"> <img src="assets/Screenshot7.png" width="300">
-<img src="assets/Screenshot8.png" width="300"> <img src="assets/Screenshot9.png" width="300"> <img src="assets/Screenshot10.png" width="300">
+<img src="assets/Screenshot1.png" width="300"> <img src="assets/Screenshot2.png" width="300"> <img src="assets/Screenshot3.png" width="300">
+<img src="assets/Screenshot4.png" width="300"> <img src="assets/Screenshot5.png" width="300"> <img src="assets/Screenshot6.png" width="300">
+<img src="assets/Screenshot7.png" width="300"> <img src="assets/Screenshot8.png" width="300"> <img src="assets/Screenshot9.png" width="300">
 <img src="assets/Screenshot10.png" width="300">
 
 Become a Productivity Wizard today by downloading FocusTime!
