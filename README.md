@@ -3,11 +3,24 @@
 # Link to Download my app on the Google Play Store: https://play.google.com/store/apps/details?id=com.PenguDev.app.focus_time
 
 # Screenshots
-<img src="assets/Screenshot1.png" width="300"> <img src="assets/Screenshot2.png" width="300"> <img src="assets/Screenshot3.png" width="300"> 
-<br>
-<img src="assets/Screenshot4.png" width="300"> <img src="assets/Screenshot5.png" width="300"> <img src="assets/Screenshot6.png" width="300"> 
-<br>
+<img src="assets/Screenshot1.png" width="300"> <img src="assets/Screenshot2.png" width="300"> <img src="assets/Screenshot3.png" width="300">
+<img src="assets/Screenshot4.png" width="300"> <img src="assets/Screenshot5.png" width="300"> <img src="assets/Screenshot6.png" width="300">
 <img src="assets/Screenshot7.png" width="300"> <img src="assets/Screenshot8.png" width="300"> <img src="assets/Screenshot9.png" width="300"> 
+
+<br>
+
+| Image 1 | Image 2 | Image 3 |
+| ------- | ------- | ------- |
+| ![Screenshot1](assets/Screenshot1.png) | ![Screenshot2](assets/Screenshot2.png) | ![Screenshot3](assets/Screenshot3.png) |
+
+| Image 4 | Image 5 | Image 6 |
+| ------- | ------- | ------- |
+| ![Screenshot4](assets/Screenshot4.png) | ![Screenshot5](assets/Screenshot5.png) | ![Screenshot6](assets/Screenshot6.png) |
+
+| Image 7 | Image 8 | Image 9 |
+| ------- | ------- | ------- |
+| ![Screenshot7](assets/Screenshot7.png) | ![Screenshot8](assets/Screenshot8.png) | ![Screenshot9](assets/Screenshot9.png) |
+
 
 Become a Productivity Wizard today by downloading FocusTime!
 Improve your life by building life long habits.
