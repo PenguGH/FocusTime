@@ -1,9 +1,11 @@
 ![FocusTimeLogo](assets/logo4_small_no_background.png)
-# Link to download my app on the Google Play Store: https://play.google.com/store/apps/details?id=com.PenguDev.app.focus_time
+![GooglePlayStoreListing](assets/GooglePlayStoreListing.png)
+# Link to Download my app on the Google Play Store: https://play.google.com/store/apps/details?id=com.PenguDev.app.focus_time
 
 # Screenshots
-<img src="assets/Screenshot1.png" width="300"> <img src="assets/Screenshot2.png" width="300"> <img src="assets/Screenshot3.png" width="300"> <img src="assets/Screenshot4.png" width="300">
-<img src="assets/Screenshot5.png" width="300"> <img src="assets/Screenshot6.png" width="300"> <img src="assets/Screenshot7.png" width="300">
+<img src="assets/Screenshot1.png" width="300"> <img src="assets/Screenshot2.png" width="300"> <img src="assets/Screenshot3.png" width="300"> 
+<img src="assets/Screenshot4.png" width="300"> <img src="assets/Screenshot5.png" width="300"> <img src="assets/Screenshot6.png" width="300"> 
+<img src="assets/Screenshot7.png" width="300"> <img src="assets/Screenshot8.png" width="300"> <img src="assets/Screenshot9.png" width="300"> 
 
 Become a Productivity Wizard today by downloading FocusTime!
 Improve your life by building life long habits.
@@ -31,6 +33,7 @@ Flutter Framework and Dart Language
 
 Shared Preferences plugin for local device data storage.
 
+# Useful Info
 The Pomodoro Study Technique explained:
 ![PomodoroTechnique](https://media.hswstatic.com/eyJidWNrZXQiOiJjb250ZW50Lmhzd3N0YXRpYy5jb20iLCJrZXkiOiJnaWZcL3BvbW9kb3JvMy5qcGciLCJlZGl0cyI6eyJyZXNpemUiOnsid2lkdGgiOjgyOH0sInRvRm9ybWF0IjoiYXZpZiJ9fQ==)
 https://science.howstuffworks.com/life/inside-the-mind/human-brain/pomodoro-technique.htm
