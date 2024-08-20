@@ -1,5 +1,5 @@
 ![FocusTimeLogo](assets/logo4_small_no_background.png)
-![GooglePlayStoreListing](assets/GooglePlayStoreListing.png)
+![GooglePlayStoreListing](assets/GooglePlayStoreListing.png?)
 # Link to Download my app on the Google Play Store: https://play.google.com/store/apps/details?id=com.PenguDev.app.focus_time
 
 # Screenshots
